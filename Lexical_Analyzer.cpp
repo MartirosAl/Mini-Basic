@@ -1,243 +1,568 @@
 #pragma once
 #include "Lexical_Analyzer.h"
 
-//Ќачало строки
+//начало строки
 void Lexical_Analyzer::A1(SymbolicToken ch)
 {
-    switch (ch.token_class)
-    {
-    case DIGIT:
-        E2a();
-        break;
-    case SPACE:
-        q = A1;
-        break;
-    case LF:
-        q = A1;
-        break;
-    case END_OF_FILE_S:
-        q = EXIT1;
-        break;
-    default:
-        break;
-    }
+   switch (ch.token_class)
+   {
+   case DIGIT:
+      E2a();
+      break;
+   case SPACE:
+      q = A1;
+      break;
+   case LF:
+      q = A1;
+      break;
+   case END_OF_FILE_S:
+      q = EXIT1;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//искать перем., конст., опер., —R, (, ), отнош.
 void Lexical_Analyzer::A2(SymbolicToken ch)
 {
-    switch (ch.token_class)
-    {
-    case LETTER:
-        C2a();
-        break;
-    case DIGIT:
-        D1a();
-        break;
-    case ARITHMETIC_OPERATION_S:
-        A2a();
-        break;
-    case RELATION_S:
-        H1a();
-        break;
-    case O_BRACE_S:
-        A2h();
-        break;
-    case C_BRACE_S:
-        A3b();
-        break;
-    case DOT:
-        q = D6;
-        break;
-    case SPACE:
-        break;
-    case LF:
-        break;
-    case END_OF_FILE_S:
-        break;
-    default:
-        break;
-    }
+   switch (ch.token_class)
+   {
+   case LETTER:
+      C2a();
+      break;
+   case DIGIT:
+      D1a();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      A2a();
+      break;
+   case RELATION_S:
+      H1a();
+      break;
+   case O_BRACE_S:
+      A2h();
+      break;
+   case C_BRACE_S:
+      A3b();
+      break;
+   case DOT:
+      q = D6;
+      break;
+   case SPACE:
+      q = A2;
+      break;
+   case LF:
+      q = A1;
+      break;
+   case END_OF_FILE_S:
+      q = EXIT1;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//искать зарезерв. слово, опер., —R, (, ), отнош
 void Lexical_Analyzer::A3(SymbolicToken ch)
 {
-    switch (ch.token_class)
-    {
-    case LETTER:
-        break;
-    case DIGIT:
-        break;
-    case ARITHMETIC_OPERATION_S:
-        break;
-    case RELATION_S:
-        break;
-    case O_BRACE_S:
-        break;
-    case C_BRACE_S:
-        break;
-    case DOT:
-        break;
-    case SPACE:
-        break;
-    case LF:
-        break;
-    case END_OF_FILE_S:
-        break;
-    default:
-        break;
-    }
+   switch (ch.token_class)
+   {
+   case LETTER:
+      B1a();
+      break;
+   case DIGIT:
+      D1a();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      A2a();
+      break;
+   case RELATION_S:
+      H1a();
+      break;
+   case O_BRACE_S:
+      A2h();
+      break;
+   case C_BRACE_S:
+      A3b();
+      break;
+   case DOT:
+      q = D6;
+      break;
+   case SPACE:
+      q = A3;
+      break;
+   case LF:
+      q = A1;
+      break;
+   case END_OF_FILE_S:
+      q = EXIT1;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//ќбнаружить зарезерв.слово
 void Lexical_Analyzer::B1(SymbolicToken ch)
 {
-    switch (ch.token_class)
-    {
-    case LETTER:
-        break;
-    case DIGIT:
-        break;
-    case ARITHMETIC_OPERATION_S:
-        break;
-    case RELATION_S:
-        break;
-    case O_BRACE_S:
-        break;
-    case C_BRACE_S:
-        break;
-    case DOT:
-        break;
-    case SPACE:
-        break;
-    case LF:
-        break;
-    case END_OF_FILE_S:
-        break;
-    default:
-        break;
-    }
+   switch (ch.token_class)
+   {
+   case LETTER:
+      M1();
+      break;
+   case SPACE:
+      q = B1;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//искать переменную
 void Lexical_Analyzer::C1(SymbolicToken ch)
 {
-    switch (ch.token_class)
-    {
-    case LETTER:
-        break;
-    case DIGIT:
-        break;
-    case ARITHMETIC_OPERATION_S:
-        break;
-    case RELATION_S:
-        break;
-    case O_BRACE_S:
-        break;
-    case C_BRACE_S:
-        break;
-    case DOT:
-        break;
-    case SPACE:
-        break;
-    case LF:
-        break;
-    case END_OF_FILE_S:
-        break;
-    default:
-        break;
-    }
+   switch (ch.token_class)
+   {
+   case LETTER:
+      C2d();
+      break;
+   case SPACE:
+      q = C1;
+      break;
+   case END_OF_FILE_S:
+      q = EXIT3;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//завершить обработку переменной
 void Lexical_Analyzer::C2(SymbolicToken ch)
 {
-    switch (ch.token_class)
-    {
-    case LETTER:
-        break;
-    case DIGIT:
-        break;
-    case ARITHMETIC_OPERATION_S:
-        break;
-    case RELATION_S:
-        break;
-    case O_BRACE_S:
-        break;
-    case C_BRACE_S:
-        break;
-    case DOT:
-        break;
-    case SPACE:
-        break;
-    case LF:
-        break;
-    case END_OF_FILE_S:
-        break;
-    default:
-        break;
-    }
+   switch (ch.token_class)
+   {
+   case LETTER:
+      B1b();
+      break;
+   case DIGIT:
+      A3a();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      A2g();
+      break;
+   case RELATION_S:
+      H1b();
+      break;
+   case O_BRACE_S:
+      A2k();
+      break;
+   case C_BRACE_S:
+      A3c();
+      break;
+   case SPACE:
+      q = C2;
+      break;
+   case LF:
+      A1a();
+      break;
+   case END_OF_FILE_S:
+      q = EXIT4;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//завершить обработку целой части
 void Lexical_Analyzer::D1(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case LETTER:
+      M2();
+      break;
+   case DIGIT:
+      D1b();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      A2c();
+      break;
+   case RELATION_S:
+      H1c();
+      break;
+   case O_BRACE_S:
+      A2l();
+      break;
+   case C_BRACE_S:
+      A3d();
+      break;
+   case DOT:
+      D2c();
+      break;
+   case SPACE:
+      q = D2;
+      break;
+   case LF:
+      A1b();
+      break;
+   case END_OF_FILE_S:
+      q = EXIT3;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//завершить обработку дробной части
 void Lexical_Analyzer::D2(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case LETTER:
+      M3();
+      break;
+   case DIGIT:
+      D2a();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      A2d();
+      break;
+   case RELATION_S:
+      H1d();
+      break;
+   case O_BRACE_S:
+      A2m();
+      break;
+   case C_BRACE_S:
+      A3e();
+      break;
+   case SPACE:
+      q = D2;
+      break;
+   case LF:
+      A1c();
+      break;
+   case END_OF_FILE_S:
+      q = EXIT4;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//после буквы ≈
 void Lexical_Analyzer::D3(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case DIGIT:
+      D5a();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      D4a();
+      break;
+   case SPACE:
+      q = D3;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//после буквы ≈ и знака
 void Lexical_Analyzer::D4(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case DIGIT:
+      D2b();
+      break;
+   case SPACE:
+      q = D4;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//завершить обработку пор€дка
 void Lexical_Analyzer::D5(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case LETTER:
+      B1c();
+      break;
+   case DIGIT:
+      D5c();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      A2e();
+      break;
+   case RELATION_S:
+      H1c();
+      break;
+   case O_BRACE_S:
+      A2n();
+      break;
+   case C_BRACE_S:
+      A3f();
+      break;
+   case SPACE:
+      q = D5;
+      break;
+   case LF:
+      A1d();
+      break;
+   case END_OF_FILE_S:
+      q = EXIT5;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//после первой дес€тичной точки
 void Lexical_Analyzer::D6(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case DIGIT:
+      D2b();
+      break;
+   case SPACE:
+      q = D6;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//искать номер строки
 void Lexical_Analyzer::E1(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case DIGIT:
+      E2b();
+      break;
+   case SPACE:
+      q = E1;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//оставша€с€ часть номера строки
 void Lexical_Analyzer::E2(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case LETTER:
+      B1e();
+      break;
+   case DIGIT:
+      E2c();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      A2f();
+      break;
+   case RELATION_S:
+      H1f();
+      break;
+   case O_BRACE_S:
+      A2j();
+      break;
+   case C_BRACE_S:
+      A3g();
+      break;
+   case SPACE:
+      q = E2;
+      break;
+   case LF:
+      A1e();
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//искать переменную и =
 void Lexical_Analyzer::F1(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case LETTER:
+      F2a();
+      break;
+   case SPACE:
+      q = F1;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//оставша€с€ часть переменной
 void Lexical_Analyzer::F2(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case DIGIT:
+      F3a();
+      break;
+   case RELATION_S:
+      A2o();
+      break;
+   case SPACE:
+      q = F2;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//искать =
 void Lexical_Analyzer::F3(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case RELATION_S:
+      A2o();
+      break;
+   case SPACE:
+      q = F3;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//найти —R (комментарий)
 void Lexical_Analyzer::G1(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case LETTER:
+      q = G1;
+      break;
+   case DIGIT:
+      q = G1;
+      break;
+   case ARITHMETIC_OPERATION_S:
+      q = G1;
+      break;
+   case RELATION_S:
+      q = G1;
+      break;
+   case O_BRACE_S:
+      q = G1;
+      break;
+   case C_BRACE_S:
+      q = G1;
+      break;
+   case DOT:
+      q = G1;
+      break;
+   case SPACE:
+      q = G1;
+      break;
+   case LF:
+      q = A1;
+      break;
+   case END_OF_FILE_S:
+      q = EXIT1;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
 }
 
+//завершить обработку отношени€
 void Lexical_Analyzer::H1(SymbolicToken ch)
 {
-   ;
+   switch (ch.token_class)
+   {
+   case LETTER:
+      C2b();
+      break;
+   case DIGIT:
+      D1c();
+      break;
+   case ARITHMETIC_OPERATION_S:
+      A2g();
+      break;
+   case RELATION_S:
+      A2p();
+      break;
+   case O_BRACE_S:
+      A2k();
+      break;
+   case C_BRACE_S:
+      A3c();
+      break;
+   case DOT:
+      D6a();
+      break;
+   case SPACE:
+      q = H1;
+      break;
+   case LF:
+      A1a();
+      break;
+   case END_OF_FILE_S:
+      q = EXIT1;
+      break;
+   default:
+      Error(ch);
+      break;
+   }
+}
+
+void Lexical_Analyzer::DA1D()
+{
+   number_reg = 0;
+
+}
+
+void Lexical_Analyzer::DA2D()
+{
+
+}
+
+void Lexical_Analyzer::DA3D()
+{
+
+}
+
+void Lexical_Analyzer::DA1E()
+{
+
+}
+
+void Lexical_Analyzer::DA1Ecycle()
+{
+
 }
 
 void Lexical_Analyzer::Error(SymbolicToken ch)
@@ -339,4 +664,4 @@ Lexical_Analyzer::Lexical_Analyzer(string name_file)
       }
    }
 
-`}
+}

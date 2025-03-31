@@ -44,7 +44,7 @@ enum SymbolicTokenType
    ERROR_S,
    O_BRACE_S,
    C_BRACE_S,
-   END_S,
+   DOT,
    END_OF_FILE_S
 };
 

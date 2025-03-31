@@ -1,36 +1,178 @@
 #pragma once
 #include "Lexical_Analyzer.h"
 
+//Начало строки
 void Lexical_Analyzer::A1(SymbolicToken ch)
 {
-   cout << "Hello World!" << endl;
-   q = &Lexical_Analyzer::A2;
+    switch (ch.token_class)
+    {
+    case DIGIT:
+        E2a();
+        break;
+    case SPACE:
+        q = A1;
+        break;
+    case LF:
+        q = A1;
+        break;
+    case END_OF_FILE_S:
+        q = EXIT1;
+        break;
+    default:
+        break;
+    }
 }
 
 void Lexical_Analyzer::A2(SymbolicToken ch)
 {
-   cout << "World!" << endl;
-   q = &Lexical_Analyzer::A3;
+    switch (ch.token_class)
+    {
+    case LETTER:
+        C2a();
+        break;
+    case DIGIT:
+        D1a();
+        break;
+    case ARITHMETIC_OPERATION_S:
+        A2a();
+        break;
+    case RELATION_S:
+        H1a();
+        break;
+    case O_BRACE_S:
+        A2h();
+        break;
+    case C_BRACE_S:
+        A3b();
+        break;
+    case DOT:
+        q = D6;
+        break;
+    case SPACE:
+        break;
+    case LF:
+        break;
+    case END_OF_FILE_S:
+        break;
+    default:
+        break;
+    }
 }
 
 void Lexical_Analyzer::A3(SymbolicToken ch)
 {
-   ;
+    switch (ch.token_class)
+    {
+    case LETTER:
+        break;
+    case DIGIT:
+        break;
+    case ARITHMETIC_OPERATION_S:
+        break;
+    case RELATION_S:
+        break;
+    case O_BRACE_S:
+        break;
+    case C_BRACE_S:
+        break;
+    case DOT:
+        break;
+    case SPACE:
+        break;
+    case LF:
+        break;
+    case END_OF_FILE_S:
+        break;
+    default:
+        break;
+    }
 }
 
 void Lexical_Analyzer::B1(SymbolicToken ch)
 {
-   ;
+    switch (ch.token_class)
+    {
+    case LETTER:
+        break;
+    case DIGIT:
+        break;
+    case ARITHMETIC_OPERATION_S:
+        break;
+    case RELATION_S:
+        break;
+    case O_BRACE_S:
+        break;
+    case C_BRACE_S:
+        break;
+    case DOT:
+        break;
+    case SPACE:
+        break;
+    case LF:
+        break;
+    case END_OF_FILE_S:
+        break;
+    default:
+        break;
+    }
 }
 
 void Lexical_Analyzer::C1(SymbolicToken ch)
 {
-   ;
+    switch (ch.token_class)
+    {
+    case LETTER:
+        break;
+    case DIGIT:
+        break;
+    case ARITHMETIC_OPERATION_S:
+        break;
+    case RELATION_S:
+        break;
+    case O_BRACE_S:
+        break;
+    case C_BRACE_S:
+        break;
+    case DOT:
+        break;
+    case SPACE:
+        break;
+    case LF:
+        break;
+    case END_OF_FILE_S:
+        break;
+    default:
+        break;
+    }
 }
 
 void Lexical_Analyzer::C2(SymbolicToken ch)
 {
-   ;
+    switch (ch.token_class)
+    {
+    case LETTER:
+        break;
+    case DIGIT:
+        break;
+    case ARITHMETIC_OPERATION_S:
+        break;
+    case RELATION_S:
+        break;
+    case O_BRACE_S:
+        break;
+    case C_BRACE_S:
+        break;
+    case DOT:
+        break;
+    case SPACE:
+        break;
+    case LF:
+        break;
+    case END_OF_FILE_S:
+        break;
+    default:
+        break;
+    }
 }
 
 void Lexical_Analyzer::D1(SymbolicToken ch)
@@ -197,4 +339,4 @@ Lexical_Analyzer::Lexical_Analyzer(string name_file)
       }
    }
 
-}
+`}

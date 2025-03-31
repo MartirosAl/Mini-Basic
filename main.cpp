@@ -3,6 +3,6 @@
 using namespace std;
 int main()
 { 
-   Lexical_Analyzer("Test1.txt");
+   Lexical_Analyzer A("Test1.txt");
    return 0;
 }

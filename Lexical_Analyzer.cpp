@@ -1,6 +1,102 @@
 #pragma once
 #include "Lexical_Analyzer.h"
 
+
+SymbolicToken Lexical_Analyzer::Transliterator(int character)
+{
+    SymbolicToken result;
+    result.value = 0;
+    if (character >= 'A' && character <= 'Z')
+    {
+        result.token_class = SymbolicTokenType::LETTER;
+        result.value = (int)character;
+    }
+    else if (character >= '0' && character <= '9')
+    {
+        result.token_class = SymbolicTokenType::DIGIT;
+        result.value = (int)character;
+    }
+    else if (character == '+' || character == '-' || character == '*' || character == '/' || character == '^')
+    {
+        result.token_class = SymbolicTokenType::ARITHMETIC_OPERATION_S;
+        result.value = (int)character;
+    }
+    else if (character == '<' || character == '>' || character == '=')
+    {
+        result.token_class = SymbolicTokenType::RELATION_S;
+        result.value = (int)character;
+    }
+    else if (character == '(')
+    {
+        result.token_class = SymbolicTokenType::O_BRACE_S;
+        result.value = (int)character;
+    }
+    else if (character == ')')
+    {
+        result.token_class = SymbolicTokenType::C_BRACE_S;
+        result.value = (int)character;
+    }
+    else if (character == ' ' || character == '\t')
+    {
+        result.token_class = SymbolicTokenType::SPACE;
+        result.value = (int)character;
+    }
+    else if (character == '\n')
+    {
+        result.token_class = SymbolicTokenType::LF;
+        result.value = (int)character;
+    }
+    else if (character == EOF)
+    {
+        result.token_class = SymbolicTokenType::END_OF_FILE_S;
+        result.value = (int)character;
+    }
+    else
+    {
+        result.token_class = SymbolicTokenType::ERROR_S;
+        result.value = (int)character;
+    }
+    return result;
+}
+
+Lexical_Analyzer::Lexical_Analyzer(string name_file)
+{
+    ifstream in(name_file);
+    if (!in)
+    {
+        cout << "Couldn't open the file " << name_file << endl;
+        return;
+    }
+
+    SymbolicToken character;
+    string word;
+
+    //Tests flags
+    bool flag_work_state = false;
+
+    //Initial state
+    q = &Lexical_Analyzer::A1;
+
+    while (true)
+    {
+        character = Transliterator(in.get());
+
+
+        (this->*q)(character);
+        if (q == &Lexical_Analyzer::Error)
+            return;
+        if (flag_work_state)
+            cout << character.value << endl;
+
+        if (q == &Lexical_Analyzer::A3)
+        {
+            cout << "Goodbye World!" << endl;
+            break;
+        }
+    }
+
+}
+
 //начало строки
 void Lexical_Analyzer::A1(SymbolicToken ch)
 {
@@ -542,27 +638,393 @@ void Lexical_Analyzer::H1(SymbolicToken ch)
 void Lexical_Analyzer::DA1D()
 {
    number_reg = 0;
+   //Вычислить константу
 
 }
 
 void Lexical_Analyzer::DA2D()
 {
-
+    order_reg = -counter_reg;
+    //Вычислить константу
 }
 
 void Lexical_Analyzer::DA3D()
 {
+    if (order_reg == -1)
+    {
+        order_reg = -order_reg;
+    }
 
+    counter_reg -= order_reg;
+
+    //Вычислить константу
 }
 
 void Lexical_Analyzer::DA1E()
 {
-
+    ....
 }
 
 void Lexical_Analyzer::DA1Ecycle()
 {
+    ....
+}
 
+void Lexical_Analyzer::A1a()
+{
+    Create_Token();
+
+}
+
+void Lexical_Analyzer::A1b()
+{
+    DA1D();
+
+}
+
+void Lexical_Analyzer::A1c()
+{
+    DA2D();
+
+}
+
+void Lexical_Analyzer::A1d()
+{
+    DA3D();
+    A1a();
+
+}
+
+void Lexical_Analyzer::A1e()
+{
+    DA1E();
+    A1a();
+
+}
+
+void Lexical_Analyzer::A2a()
+{
+    lex_class_reg = ARITHMETIC_OPERATIONS;
+
+}
+
+void Lexical_Analyzer::A2b()
+{
+    Create_Token();
+
+}
+
+void Lexical_Analyzer::A2c()
+{
+    DA1D();
+
+}
+
+void Lexical_Analyzer::A2d()
+{
+    DA2D();
+    A2g();
+
+}
+
+void Lexical_Analyzer::A2e()
+{
+    DA3D();
+    A2g();
+
+}
+
+void Lexical_Analyzer::A2f()
+{
+    DA1E();
+    A2g();
+
+}
+
+void Lexical_Analyzer::A2g()
+{
+    Create_Token();
+
+}
+
+void Lexical_Analyzer::A2h()
+{
+    lex_class_reg = L_BRACKET;
+    Create_Token();
+    
+}
+
+void Lexical_Analyzer::A2j()
+{
+    DA1E();
+
+}
+
+void Lexical_Analyzer::A2k()
+{
+    Create_Token();
+}
+
+void Lexical_Analyzer::A2l()
+{
+    DA1D();
+    A2k();
+
+}
+
+void Lexical_Analyzer::A2m()
+{
+    DA2D();
+    A2k();
+
+}
+
+void Lexical_Analyzer::A2n()
+{
+    DA3D();
+    A2k();
+
+}
+
+void Lexical_Analyzer::A2o()
+{
+    if ()
+}
+
+void Lexical_Analyzer::A2p()
+{
+}
+
+void Lexical_Analyzer::A2q()
+{
+}
+
+void Lexical_Analyzer::A2r()
+{
+}
+
+void Lexical_Analyzer::A2s()
+{
+}
+
+void Lexical_Analyzer::A2t()
+{
+}
+
+void Lexical_Analyzer::A2u()
+{
+}
+
+void Lexical_Analyzer::A3a()
+{
+}
+
+void Lexical_Analyzer::A3b()
+{
+}
+
+void Lexical_Analyzer::A3c()
+{
+}
+
+void Lexical_Analyzer::A3d()
+{
+}
+
+void Lexical_Analyzer::A3e()
+{
+}
+
+void Lexical_Analyzer::A3f()
+{
+}
+
+void Lexical_Analyzer::A3g()
+{
+}
+
+void Lexical_Analyzer::B1a()
+{
+}
+
+void Lexical_Analyzer::B1b()
+{
+}
+
+void Lexical_Analyzer::B1c()
+{
+}
+
+void Lexical_Analyzer::B1d()
+{
+}
+
+void Lexical_Analyzer::B1e()
+{
+}
+
+void Lexical_Analyzer::C1a()
+{
+}
+
+void Lexical_Analyzer::C2a()
+{
+}
+
+void Lexical_Analyzer::C2b()
+{
+}
+
+void Lexical_Analyzer::C2d()
+{
+}
+
+void Lexical_Analyzer::D1a()
+{
+}
+
+void Lexical_Analyzer::D1b()
+{
+}
+
+void Lexical_Analyzer::D1c()
+{
+}
+
+void Lexical_Analyzer::D2a()
+{
+}
+
+void Lexical_Analyzer::D2b()
+{
+}
+
+void Lexical_Analyzer::D2c()
+{
+}
+
+void Lexical_Analyzer::D3a()
+{
+}
+
+void Lexical_Analyzer::D4a()
+{
+}
+
+void Lexical_Analyzer::D5a()
+{
+}
+
+void Lexical_Analyzer::D5b()
+{
+}
+
+void Lexical_Analyzer::D5c()
+{
+}
+
+void Lexical_Analyzer::D6a()
+{
+}
+
+void Lexical_Analyzer::E1a()
+{
+}
+
+void Lexical_Analyzer::E1b()
+{
+}
+
+void Lexical_Analyzer::E2a()
+{
+}
+
+void Lexical_Analyzer::E2b()
+{
+}
+
+void Lexical_Analyzer::E2c()
+{
+}
+
+void Lexical_Analyzer::F1a()
+{
+}
+
+void Lexical_Analyzer::F1b()
+{
+}
+
+void Lexical_Analyzer::F2a()
+{
+}
+
+void Lexical_Analyzer::F3a()
+{
+}
+
+void Lexical_Analyzer::G1a()
+{
+}
+
+void Lexical_Analyzer::H1a()
+{
+}
+
+void Lexical_Analyzer::H1b()
+{
+}
+
+void Lexical_Analyzer::H1c()
+{
+}
+
+void Lexical_Analyzer::H1d()
+{
+}
+
+void Lexical_Analyzer::H1e()
+{
+}
+
+void Lexical_Analyzer::H1f()
+{
+}
+
+void Lexical_Analyzer::M1()
+{
+}
+
+void Lexical_Analyzer::M2()
+{
+}
+
+void Lexical_Analyzer::M3()
+{
+}
+
+void Lexical_Analyzer::Exit1()
+{
+}
+
+void Lexical_Analyzer::Exit2()
+{
+}
+
+void Lexical_Analyzer::Exit3()
+{
+}
+
+void Lexical_Analyzer::Exit4()
+{
+}
+
+void Lexical_Analyzer::Exit5()
+{
+}
+
+void Lexical_Analyzer::Exit6()
+{
 }
 
 void Lexical_Analyzer::Error(SymbolicToken ch)
@@ -571,97 +1033,6 @@ void Lexical_Analyzer::Error(SymbolicToken ch)
 }
 
 
-SymbolicToken Lexical_Analyzer::Transliterator(int character)
-{
-   SymbolicToken result;
-   result.value = 0;
-   if (character >= 'A' && character <= 'Z')
-   {
-      result.token_class = SymbolicTokenType::LETTER;
-      result.value = (int)character;
-   }
-   else if (character >= '0' && character <= '9')
-   {
-      result.token_class = SymbolicTokenType::DIGIT;
-      result.value = (int)character;
-   }
-   else if (character == '+' || character == '-' || character == '*' || character == '/' || character == '^')
-   {
-      result.token_class = SymbolicTokenType::ARITHMETIC_OPERATION_S;
-      result.value = (int)character;
-   }
-   else if (character == '<' || character == '>' || character == '=')
-   {
-      result.token_class = SymbolicTokenType::RELATION_S;
-      result.value = (int)character;
-   }
-   else if (character == '(')
-   {
-      result.token_class = SymbolicTokenType::O_BRACE_S;
-      result.value = (int)character;
-   }
-   else if (character == ')')
-   {
-      result.token_class = SymbolicTokenType::C_BRACE_S;
-      result.value = (int)character;
-   }
-   else if (character == ' ' || character == '\t')
-   {
-      result.token_class = SymbolicTokenType::SPACE;
-      result.value = (int)character;
-   }
-   else if (character == '\n')
-   {
-      result.token_class = SymbolicTokenType::LF;
-      result.value = (int)character;
-   }
-   else if (character == EOF)
-   {
-      result.token_class = SymbolicTokenType::END_OF_FILE_S;
-      result.value = (int)character;
-   }
-   else
-   {
-      result.token_class = SymbolicTokenType::ERROR_S;
-      result.value = (int)character;
-   }
-   return result;
-}
 
-Lexical_Analyzer::Lexical_Analyzer(string name_file)
-{
-   ifstream in(name_file);
-   if (!in)
-   {
-      cout << "Couldn't open the file " << name_file << endl;
-      return; 
-   }
 
-   SymbolicToken character;
-   string word;
 
-   //Tests flags
-   bool flag_work_state = false;
-
-   //Initial state
-   q = &Lexical_Analyzer::A1;
-
-   while(true)
-   {
-      character = Transliterator(in.get());
-      
-
-      (this->*q)(character);
-      if (q == &Lexical_Analyzer::Error)
-         return;
-      if (flag_work_state)
-         cout << character.value << endl;
-
-      if (q == &Lexical_Analyzer::A3)
-      {
-         cout << "Goodbye World!" << endl;
-         break;
-      }
-   }
-
-}

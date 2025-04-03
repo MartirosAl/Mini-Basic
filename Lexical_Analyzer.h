@@ -82,6 +82,107 @@ class Lexical_Analyzer
    void DA1E();
    void DA1Ecycle();
 
+   void A1a();
+   void A1b();
+   void A1c();
+   void A1d();
+   void A1e();
+
+   void A2a(); 
+   void A2b(); 
+   void A2c(); 
+   void A2d(); 
+   void A2e(); 
+   void A2f(); 
+   void A2g(); 
+   void A2h(); 
+   void A2j(); 
+   void A2k(); 
+   void A2l(); 
+   void A2m(); 
+   void A2n(); 
+   void A2o(); 
+   void A2p(); 
+   void A2q(); 
+   void A2r(); 
+   void A2s(); 
+   void A2t(); 
+   void A2u(); 
+   
+   void A3a();
+   void A3b();
+   void A3c();
+   void A3d();
+   void A3e();
+   void A3f();
+   void A3g();
+
+   void B1a();
+   void B1b();
+   void B1c();
+   void B1d();
+   void B1e();
+
+   void C1a();
+
+   void C2a();
+   void C2b();
+   void C2d();
+
+   void D1a();
+   void D1b();
+   void D1c();
+   
+   void D2a();
+   void D2b();
+   void D2c();
+
+   void D3a();
+
+   void D4a();
+   
+   void D5a();
+   void D5b();
+   void D5c();
+
+   void D6a();
+
+   void E1a();
+   void E1b();
+
+   void E2a();
+   void E2b();
+   void E2c();
+
+   void F1a();
+   void F1b();
+
+   void F2a();
+
+   void F3a();
+
+   void G1a();
+
+   void H1a();
+   void H1b();
+   void H1c();
+   void H1d();
+   void H1e();
+   void H1f();
+
+   void M1();
+   void M2();
+   void M3();
+
+   void Exit1();
+   void Exit2();
+   void Exit3();
+   void Exit4();
+   void Exit5();
+   void Exit6();
+
+
+
 
 public:
 

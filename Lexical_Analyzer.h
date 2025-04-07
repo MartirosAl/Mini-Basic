@@ -9,21 +9,34 @@
 using namespace std; 
 class Lexical_Analyzer
 {
-   std::fstream error_list;
-   std::string string_reg;
-   double number_reg = 0;
-   int order_sign_reg = 0;
-   int order_reg = 0;
+   //Ôאיכ ס מרטבךאלט
+   std::fstream error_list;   
+   //RSTR
+   int string_reg;
+   //RCH
+   double number_reg = 0; 
+   //RZ
+   int order_sign_reg = 0;       
+   //RP
+   int order_reg = 0;        
+   //RS
    int counter_reg = 0;
-   int lex_class_reg = 0;
+   //RKL
+   TokenType lex_class_reg = start;
+   //ROT
    int relation_value_reg = 0;
+   //RZN
    int char_value_reg = 0;
+   //RSOS
    int state_reg = 0;
+   //ROB
    int detection_reg = 0;
+   //RK
    int char_class_value_reg = 0;
 
    void(Lexical_Analyzer::*q) (SymbolicToken ch);
 
+   //TL
    vector<Token> table_tokens;
 
    SymbolicToken Transliterator(int character);

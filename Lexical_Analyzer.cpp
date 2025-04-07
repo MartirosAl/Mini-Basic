@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "Lexical_Analyzer.h"
 
 
@@ -97,7 +97,7 @@ Lexical_Analyzer::Lexical_Analyzer(string name_file)
 
 }
 
-//начало строки
+//РЅР°С‡Р°Р»Рѕ СЃС‚СЂРѕРєРё
 void Lexical_Analyzer::A1(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -120,7 +120,7 @@ void Lexical_Analyzer::A1(SymbolicToken ch)
    }
 }
 
-//искать перем., конст., опер., СR, (, ), отнош.
+//РёСЃРєР°С‚СЊ РїРµСЂРµРј., РєРѕРЅСЃС‚., РѕРїРµСЂ., РЎR, (, ), РѕС‚РЅРѕС€.
 void Lexical_Analyzer::A2(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -161,7 +161,7 @@ void Lexical_Analyzer::A2(SymbolicToken ch)
    }
 }
 
-//искать зарезерв. слово, опер., СR, (, ), отнош
+//РёСЃРєР°С‚СЊ Р·Р°СЂРµР·РµСЂРІ. СЃР»РѕРІРѕ, РѕРїРµСЂ., РЎR, (, ), РѕС‚РЅРѕС€
 void Lexical_Analyzer::A3(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -202,7 +202,7 @@ void Lexical_Analyzer::A3(SymbolicToken ch)
    }
 }
 
-//Обнаружить зарезерв.слово
+//РћР±РЅР°СЂСѓР¶РёС‚СЊ Р·Р°СЂРµР·РµСЂРІ.СЃР»РѕРІРѕ
 void Lexical_Analyzer::B1(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -219,7 +219,7 @@ void Lexical_Analyzer::B1(SymbolicToken ch)
    }
 }
 
-//искать переменную
+//РёСЃРєР°С‚СЊ РїРµСЂРµРјРµРЅРЅСѓСЋ
 void Lexical_Analyzer::C1(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -239,7 +239,7 @@ void Lexical_Analyzer::C1(SymbolicToken ch)
    }
 }
 
-//завершить обработку переменной
+//Р·Р°РІРµСЂС€РёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РїРµСЂРµРјРµРЅРЅРѕР№
 void Lexical_Analyzer::C2(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -277,7 +277,7 @@ void Lexical_Analyzer::C2(SymbolicToken ch)
    }
 }
 
-//завершить обработку целой части
+//Р·Р°РІРµСЂС€РёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ С†РµР»РѕР№ С‡Р°СЃС‚Рё
 void Lexical_Analyzer::D1(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -318,7 +318,7 @@ void Lexical_Analyzer::D1(SymbolicToken ch)
    }
 }
 
-//завершить обработку дробной части
+//Р·Р°РІРµСЂС€РёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РґСЂРѕР±РЅРѕР№ С‡Р°СЃС‚Рё
 void Lexical_Analyzer::D2(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -356,7 +356,7 @@ void Lexical_Analyzer::D2(SymbolicToken ch)
    }
 }
 
-//после буквы Е
+//РїРѕСЃР»Рµ Р±СѓРєРІС‹ Р•
 void Lexical_Analyzer::D3(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -376,7 +376,7 @@ void Lexical_Analyzer::D3(SymbolicToken ch)
    }
 }
 
-//после буквы Е и знака
+//РїРѕСЃР»Рµ Р±СѓРєРІС‹ Р• Рё Р·РЅР°РєР°
 void Lexical_Analyzer::D4(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -393,7 +393,7 @@ void Lexical_Analyzer::D4(SymbolicToken ch)
    }
 }
 
-//завершить обработку порядка
+//Р·Р°РІРµСЂС€РёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РїРѕСЂСЏРґРєР°
 void Lexical_Analyzer::D5(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -431,7 +431,7 @@ void Lexical_Analyzer::D5(SymbolicToken ch)
    }
 }
 
-//после первой десятичной точки
+//РїРѕСЃР»Рµ РїРµСЂРІРѕР№ РґРµСЃСЏС‚РёС‡РЅРѕР№ С‚РѕС‡РєРё
 void Lexical_Analyzer::D6(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -448,7 +448,7 @@ void Lexical_Analyzer::D6(SymbolicToken ch)
    }
 }
 
-//искать номер строки
+//РёСЃРєР°С‚СЊ РЅРѕРјРµСЂ СЃС‚СЂРѕРєРё
 void Lexical_Analyzer::E1(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -464,7 +464,7 @@ void Lexical_Analyzer::E1(SymbolicToken ch)
    }
 }
 
-//оставшаяся часть номера строки
+//РѕСЃС‚Р°РІС€Р°СЏСЃСЏ С‡Р°СЃС‚СЊ РЅРѕРјРµСЂР° СЃС‚СЂРѕРєРё
 void Lexical_Analyzer::E2(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -499,7 +499,7 @@ void Lexical_Analyzer::E2(SymbolicToken ch)
    }
 }
 
-//искать переменную и =
+//РёСЃРєР°С‚СЊ РїРµСЂРµРјРµРЅРЅСѓСЋ Рё =
 void Lexical_Analyzer::F1(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -516,7 +516,7 @@ void Lexical_Analyzer::F1(SymbolicToken ch)
    }
 }
 
-//оставшаяся часть переменной
+//РѕСЃС‚Р°РІС€Р°СЏСЃСЏ С‡Р°СЃС‚СЊ РїРµСЂРµРјРµРЅРЅРѕР№
 void Lexical_Analyzer::F2(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -536,7 +536,7 @@ void Lexical_Analyzer::F2(SymbolicToken ch)
    }
 }
 
-//искать =
+//РёСЃРєР°С‚СЊ =
 void Lexical_Analyzer::F3(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -553,7 +553,7 @@ void Lexical_Analyzer::F3(SymbolicToken ch)
    }
 }
 
-//найти СR (комментарий)
+//РЅР°Р№С‚Рё РЎR (РєРѕРјРјРµРЅС‚Р°СЂРёР№)
 void Lexical_Analyzer::G1(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -594,7 +594,7 @@ void Lexical_Analyzer::G1(SymbolicToken ch)
    }
 }
 
-//завершить обработку отношения
+//Р·Р°РІРµСЂС€РёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РѕС‚РЅРѕС€РµРЅРёСЏ
 void Lexical_Analyzer::H1(SymbolicToken ch)
 {
    switch (ch.token_class)
@@ -638,14 +638,14 @@ void Lexical_Analyzer::H1(SymbolicToken ch)
 void Lexical_Analyzer::DA1D()
 {
    number_reg = 0;
-   //Вычислить константу
+   //Р’С‹С‡РёСЃР»РёС‚СЊ РєРѕРЅСЃС‚Р°РЅС‚Сѓ
 
 }
 
 void Lexical_Analyzer::DA2D()
 {
     order_reg = -counter_reg;
-    //Вычислить константу
+    //Р’С‹С‡РёСЃР»РёС‚СЊ РєРѕРЅСЃС‚Р°РЅС‚Сѓ
 }
 
 void Lexical_Analyzer::DA3D()
@@ -657,7 +657,7 @@ void Lexical_Analyzer::DA3D()
 
     counter_reg -= order_reg;
 
-    //Вычислить константу
+    //Р’С‹С‡РёСЃР»РёС‚СЊ РєРѕРЅСЃС‚Р°РЅС‚Сѓ
 }
 
 void Lexical_Analyzer::DA1E()
@@ -673,226 +673,294 @@ void Lexical_Analyzer::DA1Ecycle()
 void Lexical_Analyzer::A1a()
 {
     Create_Token();
-
+    q = A1;
 }
 
 void Lexical_Analyzer::A1b()
 {
     DA1D();
-
+    q = A1;
 }
 
 void Lexical_Analyzer::A1c()
 {
     DA2D();
-
+    q = A1;
 }
 
 void Lexical_Analyzer::A1d()
 {
     DA3D();
     A1a();
-
+    q = A1;
 }
 
 void Lexical_Analyzer::A1e()
 {
     DA1E();
     A1a();
-
+    q = A1;
 }
 
 void Lexical_Analyzer::A2a()
 {
     lex_class_reg = ARITHMETIC_OPERATIONS;
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2b()
 {
     Create_Token();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2c()
 {
     DA1D();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2d()
 {
     DA2D();
     A2g();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2e()
 {
     DA3D();
     A2g();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2f()
 {
     DA1E();
     A2g();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2g()
 {
     Create_Token();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2h()
 {
     lex_class_reg = L_BRACKET;
     Create_Token();
-    
+    q = A2;
 }
 
 void Lexical_Analyzer::A2j()
 {
     DA1E();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2k()
 {
     Create_Token();
+    q = A2;
 }
 
 void Lexical_Analyzer::A2l()
 {
     DA1D();
     A2k();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2m()
 {
     DA2D();
     A2k();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2n()
 {
     DA3D();
     A2k();
-
+    q = A2;
 }
 
 void Lexical_Analyzer::A2o()
 {
-    if ()
+   if (char_value_reg == 1)
+      A2b();
+   else
+   {
+      Error_Handler();
+      return;
+   }
+   q = A2;
 }
 
 void Lexical_Analyzer::A2p()
 {
+   рџў
+   q = A2;
 }
 
 void Lexical_Analyzer::A2q()
 {
+   lex_class_reg = END;
+   q = A2;
 }
 
 void Lexical_Analyzer::A2r()
 {
+   lex_class_reg = IF;
+   q = A2;
 }
 
 void Lexical_Analyzer::A2s()
 {
+   lex_class_reg = RETURN;
+   q = A2;
 }
 
 void Lexical_Analyzer::A2t()
 {
+   lex_class_reg = STEP;
+   q = A2;
 }
 
 void Lexical_Analyzer::A2u()
 {
+   lex_class_reg = TO;
+   q = A2;
 }
 
 void Lexical_Analyzer::A3a()
 {
+   рџў
+   q = A2;
 }
 
 void Lexical_Analyzer::A3b()
 {
+   lex_class_reg = R_BRACKET;
+   q = A3;
 }
 
 void Lexical_Analyzer::A3c()
 {
+   Create_Token();
+   q = A3;
 }
 
 void Lexical_Analyzer::A3d()
 {
+   DA1D();
+   q = A3;
 }
 
 void Lexical_Analyzer::A3e()
 {
+   DA2D();
+   A3c();
+   q = A3;
 }
 
 void Lexical_Analyzer::A3f()
 {
+   DA3D();
+   A3c();
+   q = A3;
 }
 
 void Lexical_Analyzer::A3g()
 {
+   DA1E();
+   A3c();
+   q = A3;
 }
 
 void Lexical_Analyzer::B1a()
 {
+   рџў
+   q = B1;
 }
 
 void Lexical_Analyzer::B1b()
 {
+   Create_Token();
+   q = B1;
 }
 
 void Lexical_Analyzer::B1c()
 {
+   DA3D();
+   q = B1;
 }
 
 void Lexical_Analyzer::B1d()
 {
+   detection_reg++;
+   q = B1;
 }
 
 void Lexical_Analyzer::B1e()
 {
+   DA1E();
+   B1b();
+   q = B1;
 }
 
 void Lexical_Analyzer::C1a()
 {
+   lex_class_reg = NEXT;
+   q = C1;
 }
 
 void Lexical_Analyzer::C2a()
 {
+   lex_class_reg = OPERAND;
+   q = C2;
 }
 
 void Lexical_Analyzer::C2b()
 {
+   Create_Token();
+   q = C2;
 }
 
 void Lexical_Analyzer::C2d()
 {
+   рџў
+   q = C2;
 }
 
 void Lexical_Analyzer::D1a()
 {
+   lex_class_reg = OPERAND;
+   рџў
+   q = D1;
 }
 
 void Lexical_Analyzer::D1b()
 {
+   number_reg *= 10;
+   рџў
+   q = D1;
 }
 
 void Lexical_Analyzer::D1c()
 {
+   Create_Token();
+   q = D1;
 }
 
 void Lexical_Analyzer::D2a()
 {
+   counter_reg = 1;
+   number_reg *= 10;
+   рџў
+   q = D2;
 }
 
 void Lexical_Analyzer::D2b()

@@ -1,8 +1,8 @@
 #include <iostream>
-#include "Lexical_Analyzer.h"
+#include "MINI_BASIC.h"
 using namespace std;
 int main()
 { 
-   Lexical_Analyzer A("Test1.txt");
+   MINI_BASIC A("Test1.txt");
    return 0;
 }

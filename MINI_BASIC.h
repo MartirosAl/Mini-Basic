@@ -10,7 +10,7 @@ using namespace std;
 class MINI_BASIC
 {
    //Файл с ошибками
-   std::fstream error_list;   
+   std::ofstream error_list;   
    //RSTR
    int number_string_reg;
    //RCH
@@ -41,12 +41,14 @@ class MINI_BASIC
    string word;
 
    //Поток
-   ifstream& stream;
+   ifstream stream;
 
    //TL
    vector<Token> table_tokens;
 
    SymbolicToken Transliterator(int character);
+
+   void next();
 
 
 

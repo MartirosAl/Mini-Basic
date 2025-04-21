@@ -4,6 +4,7 @@
 
 SymbolicToken MINI_BASIC::Transliterator(int character)
 {
+   
     SymbolicToken result;
     result.value = 0;
     if (character >= 'A' && character <= 'Z')
@@ -59,8 +60,16 @@ SymbolicToken MINI_BASIC::Transliterator(int character)
     return result;
 }
 
+void MINI_BASIC::next()
+{
+   char temp;
+   stream.get(temp);
+   character = Transliterator(temp);
+}
+
 MINI_BASIC::MINI_BASIC(string name_file)
 {
+
     stream.open(name_file);
     if (!stream)
     {
@@ -73,7 +82,8 @@ MINI_BASIC::MINI_BASIC(string name_file)
 
     //Initial state
     q = &MINI_BASIC::A1;
-    character = Transliterator(stream.get());
+    next();
+
 
     func prev_func = q;
 
@@ -93,7 +103,7 @@ MINI_BASIC::MINI_BASIC(string name_file)
 
         //if (prev_func != q)
         //{
-        //   character = Transliterator(stream.get());
+        //   next();
         //   prev_func = q;
         //}
     }
@@ -109,7 +119,7 @@ void MINI_BASIC::A1()
       E2a();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = A1;
       break;
    case LF:
@@ -151,7 +161,7 @@ void MINI_BASIC::A2()
       q = D6;
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = A2;
       break;
    case LF:
@@ -193,7 +203,7 @@ void MINI_BASIC::A3()
       q = D6;
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = A3;
       break;
    case LF:
@@ -217,7 +227,7 @@ void MINI_BASIC::B1()
       M1();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = B1;
       break;
    default:
@@ -235,7 +245,7 @@ void MINI_BASIC::C1()
       C2d();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = C1;
       break;
    case END_OF_FILE_S:
@@ -271,7 +281,7 @@ void MINI_BASIC::C2()
       A3c();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = C2;
       break;
    case LF:
@@ -313,7 +323,7 @@ void MINI_BASIC::D1()
       D2c();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = D2;
       break;
    case LF:
@@ -352,7 +362,7 @@ void MINI_BASIC::D2()
       A3e();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = D2;
       break;
    case LF:
@@ -379,7 +389,7 @@ void MINI_BASIC::D3()
       D4a();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = D3;
       break;
    default:
@@ -397,7 +407,7 @@ void MINI_BASIC::D4()
       D2b();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = D4;
       break;
    default:
@@ -430,7 +440,7 @@ void MINI_BASIC::D5()
       A3f();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = D5;
       break;
    case LF:
@@ -455,7 +465,7 @@ void MINI_BASIC::D6()
       break;
    case SPACE:
       lex_class_reg = OPERAND;
-      character = Transliterator(stream.get());
+      next();
       q = D6;
       break;
    default:
@@ -473,7 +483,7 @@ void MINI_BASIC::E1()
       E2b();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = E1;
    default:
       Error();
@@ -505,7 +515,7 @@ void MINI_BASIC::E2()
       A3g();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = E2;
       break;
    case LF:
@@ -526,7 +536,7 @@ void MINI_BASIC::F1()
       F2a();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = F1;
       break;
    default:
@@ -547,7 +557,7 @@ void MINI_BASIC::F2()
       A2o();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = F2;
       break;
    default:
@@ -565,7 +575,7 @@ void MINI_BASIC::F3()
       A2o();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = F3;
       break;
    default:
@@ -601,7 +611,7 @@ void MINI_BASIC::G1()
       q = G1;
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = G1;
       break;
    case LF:
@@ -643,7 +653,7 @@ void MINI_BASIC::H1()
       D6a();
       break;
    case SPACE:
-      character = Transliterator(stream.get());
+      next();
       q = H1;
       break;
    case LF:
@@ -697,7 +707,7 @@ void MINI_BASIC::DA1Ecycle()
 void MINI_BASIC::A1a()
 {
     Create_Token();
-    character = Transliterator(stream.get());
+    next();
     q = A1;
 }
 
@@ -739,7 +749,7 @@ void MINI_BASIC::A2a()
 void MINI_BASIC::A2b()
 {
     Create_Token();
-    character = Transliterator(stream.get());
+    next();
     q = A2;
 }
 
@@ -782,7 +792,7 @@ void MINI_BASIC::A2h()
 {
     lex_class_reg = L_BRACKET;
     Create_Token();
-    character = Transliterator(stream.get());
+    next();
     q = A2;
 }
 
@@ -840,14 +850,14 @@ void MINI_BASIC::A2p()
    case 1:
       Error_Handler();
    case 2:
-      if (character.value == '=')
+      if (character.value == 1/* = */)
          relation_value_reg = 4;
-      else if (character.value == '>')
+      else if (character.value == 3/* > */)
          relation_value_reg = 6;
       else
          Error_Handler();
    case 3:
-      if (character.value == '=')
+      if (character.value == 1/* = */)
          relation_value_reg = 5;
       else
          Error_Handler();
@@ -894,7 +904,7 @@ void MINI_BASIC::A2u()
 void MINI_BASIC::A3a()
 {
    😢
-   character = Transliterator(stream.get());
+   next();
    q = A2;
 }
 
@@ -902,7 +912,7 @@ void MINI_BASIC::A3b()
 {
    lex_class_reg = R_BRACKET;
    Create_Token();
-   character = Transliterator(stream.get());
+   next();
    q = A3;
 }
 
@@ -944,7 +954,7 @@ void MINI_BASIC::A3g()
 void MINI_BASIC::B1a()
 {
    😢
-   character = Transliterator(stream.get());
+   next();
    q = B1;
 }
 
@@ -965,7 +975,7 @@ void MINI_BASIC::B1c()
 void MINI_BASIC::B1d()
 {
    detection_reg++;
-   character = Transliterator(stream.get());
+   next();
    q = B1;
 }
 
@@ -979,7 +989,7 @@ void MINI_BASIC::B1e()
 void MINI_BASIC::C1a()
 {
    lex_class_reg = NEXT;
-   character = Transliterator(stream.get());
+   next();
    q = C1;
 }
 
@@ -1000,7 +1010,7 @@ void MINI_BASIC::C2b()
 void MINI_BASIC::C2d()
 {
    😢
-   character = Transliterator(stream.get());
+   next();
    q = C2;
 }
 
@@ -1008,7 +1018,7 @@ void MINI_BASIC::D1a()
 {
    lex_class_reg = OPERAND;
    number_reg = character.value;
-   character = Transliterator(stream.get());
+   next();
    q = D1;
 }
 
@@ -1016,7 +1026,7 @@ void MINI_BASIC::D1b()
 {
    number_reg *= 10;
    😢
-   character = Transliterator(stream.get());
+   next();
    q = D1;
 }
 
@@ -1032,7 +1042,7 @@ void MINI_BASIC::D2a()
    counter_reg = 1;
    number_reg *= 10;
    😢
-   character = Transliterator(stream.get());
+   next();
    q = D2;
 }
 
@@ -1041,28 +1051,28 @@ void MINI_BASIC::D2b()
 {
    counter_reg = 1;
    😢
-   character = Transliterator(stream.get());
+   next();
    q = D2;
 }
 
 void MINI_BASIC::D2c()
 {
    counter_reg = 0;
-   character = Transliterator(stream.get());
+   next();
    q = D2;
 }
 
 void MINI_BASIC::D3a()
 {
    counter_reg = 0;
-   character = Transliterator(stream.get());
+   next();
    q = D3;
 }
 
 void MINI_BASIC::D4a()
 {
    😢
-   character = Transliterator(stream.get());
+   next();
    q = D4;
 }
 
@@ -1076,7 +1086,7 @@ void MINI_BASIC::D5a()
 void MINI_BASIC::D5b()
 {
    order_reg = character.value;
-   character = Transliterator(stream.get());
+   next();
    q = D5;
 }
 
@@ -1084,7 +1094,7 @@ void MINI_BASIC::D5c()
 {
    order_reg *= 10;
    order_reg = character.value;
-   character = Transliterator(stream.get());
+   next();
    q = D5;
 }
 
@@ -1092,21 +1102,21 @@ void MINI_BASIC::D6a()
 {
    Create_Token();
    lex_class_reg = OPERAND;
-   character = Transliterator(stream.get());
+   next();
    q = D6;
 }
 
 void MINI_BASIC::E1a()
 {
    lex_class_reg = GOTO;
-   character = Transliterator(stream.get());
+   next();
    q = E1;
 }
 
 void MINI_BASIC::E1b()
 {
    lex_class_reg = GOSUB;
-   character = Transliterator(stream.get());
+   next();
    q = E1;
 }
 
@@ -1120,7 +1130,7 @@ void MINI_BASIC::E2a()
 void MINI_BASIC::E2b()
 {
    number_string_reg = character.value;
-   character = Transliterator(stream.get());
+   next();
    q = E2;
 }
 
@@ -1128,35 +1138,35 @@ void MINI_BASIC::E2c()
 {
    number_string_reg *= 10;
    number_string_reg += character.value - '0';
-   character = Transliterator(stream.get());
+   next();
    q = E2;
 }
 
 void MINI_BASIC::F1a()
 {
    lex_class_reg = FOR;
-   character = Transliterator(stream.get());
+   next();
    q = F1;
 }
 
 void MINI_BASIC::F1b()
 {
    lex_class_reg = TO;
-   character = Transliterator(stream.get());
+   next();
    q = F1;
 }
 
 void MINI_BASIC::F2a()
 {
    😢
-   character = Transliterator(stream.get());
+   next();
    q = F2;
 }
 
 void MINI_BASIC::F3a()
 {
    😢
-   character = Transliterator(stream.get());
+   next();
    q = F3;
 }
 
@@ -1164,7 +1174,7 @@ void MINI_BASIC::G1a()
 {
    lex_class_reg = COMMENT;
    Create_Token();
-   character = Transliterator(stream.get());
+   next();
    q = G1;
 }
 
@@ -1172,7 +1182,7 @@ void MINI_BASIC::H1a()
 {
    relation_value_reg = character.value;
    lex_class_reg = RELATIONSHIP_OPERATIONS;
-   character = Transliterator(stream.get());
+   next();
    q = H1;
 }
 
@@ -1225,7 +1235,7 @@ void MINI_BASIC::M1()
       return;
    }
 
-   character = Transliterator(stream.get());
+   next();
    if (character.value == table_detection[detection_reg - 1].letter)
    {
       (this->*(table_detection[detection_reg - 1].f))();
@@ -1263,26 +1273,38 @@ void MINI_BASIC::M3()
 
 void MINI_BASIC::EXIT1()
 {
+   lex_class_reg = END;
+   Create_Token();
 }
 
 void MINI_BASIC::EXIT2()
 {
+   Create_Token();
+   EXIT1();
 }
 
 void MINI_BASIC::EXIT3()
 {
+   DA1D();
+   EXIT2();
 }
 
 void MINI_BASIC::EXIT4()
 {
+   DA2D();
+   EXIT2();
 }
 
 void MINI_BASIC::EXIT5()
 {
+   DA3D();
+   EXIT2();
 }
 
 void MINI_BASIC::EXIT6()
 {
+   DA1E();
+   EXIT2();
 }
 
 void MINI_BASIC::Create_Token()

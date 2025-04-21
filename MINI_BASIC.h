@@ -201,6 +201,10 @@ class MINI_BASIC
    void EXIT5();
    void EXIT6();
 
+   void Create_Token();
+
+   void Error_Handler();
+
 
    struct Keyword{
       char letter;

@@ -75,11 +75,10 @@ MINI_BASIC::MINI_BASIC(string name_file)
     q = &MINI_BASIC::A1;
     character = Transliterator(stream.get());
 
+    func prev_func = q;
+
     while (true)
     {
-        
-
-
         (this->*q)();
         if (q == &MINI_BASIC::Error)
             return;
@@ -91,6 +90,12 @@ MINI_BASIC::MINI_BASIC(string name_file)
             cout << "Goodbye World!" << endl;
             break;
         }
+
+        //if (prev_func != q)
+        //{
+        //   character = Transliterator(stream.get());
+        //   prev_func = q;
+        //}
     }
 
 }
@@ -449,6 +454,7 @@ void MINI_BASIC::D6()
       D2b();
       break;
    case SPACE:
+      lex_class_reg = OPERAND;
       character = Transliterator(stream.get());
       q = D6;
       break;
@@ -691,18 +697,21 @@ void MINI_BASIC::DA1Ecycle()
 void MINI_BASIC::A1a()
 {
     Create_Token();
+    character = Transliterator(stream.get());
     q = A1;
 }
 
 void MINI_BASIC::A1b()
 {
     DA1D();
+    A1a();
     q = A1;
 }
 
 void MINI_BASIC::A1c()
 {
     DA2D();
+    A1a();
     q = A1;
 }
 
@@ -723,18 +732,21 @@ void MINI_BASIC::A1e()
 void MINI_BASIC::A2a()
 {
     lex_class_reg = ARITHMETIC_OPERATIONS;
+    A2b();
     q = A2;
 }
 
 void MINI_BASIC::A2b()
 {
     Create_Token();
+    character = Transliterator(stream.get());
     q = A2;
 }
 
 void MINI_BASIC::A2c()
 {
     DA1D();
+    A2g();
     q = A2;
 }
 
@@ -762,6 +774,7 @@ void MINI_BASIC::A2f()
 void MINI_BASIC::A2g()
 {
     Create_Token();
+    A2a();
     q = A2;
 }
 
@@ -769,18 +782,21 @@ void MINI_BASIC::A2h()
 {
     lex_class_reg = L_BRACKET;
     Create_Token();
+    character = Transliterator(stream.get());
     q = A2;
 }
 
 void MINI_BASIC::A2j()
 {
     DA1E();
+    A2k();
     q = A2;
 }
 
 void MINI_BASIC::A2k()
 {
     Create_Token();
+    A2h();
     q = A2;
 }
 
@@ -807,7 +823,7 @@ void MINI_BASIC::A2n()
 
 void MINI_BASIC::A2o()
 {
-   if (char_value_reg == 1)
+   if (char_class_value_reg == 1)
       A2b();
    else
    {
@@ -819,61 +835,88 @@ void MINI_BASIC::A2o()
 
 void MINI_BASIC::A2p()
 {
-   char_value_reg 
+   switch (relation_value_reg)
+   {
+   case 1:
+      Error_Handler();
+   case 2:
+      if (character.value == '=')
+         relation_value_reg = 4;
+      else if (character.value == '>')
+         relation_value_reg = 6;
+      else
+         Error_Handler();
+   case 3:
+      if (character.value == '=')
+         relation_value_reg = 5;
+      else
+         Error_Handler();
+   }
+   A2b();
    q = A2;
 }
 
 void MINI_BASIC::A2q()
 {
    lex_class_reg = END;
+   A2b();
    q = A2;
 }
 
 void MINI_BASIC::A2r()
 {
    lex_class_reg = IF;
+   A2b();
    q = A2;
 }
 
 void MINI_BASIC::A2s()
 {
    lex_class_reg = RETURN;
+   A2b();
    q = A2;
 }
 
 void MINI_BASIC::A2t()
 {
    lex_class_reg = STEP;
+   A2b();
    q = A2;
 }
 
 void MINI_BASIC::A2u()
 {
    lex_class_reg = TO;
+   A2b();
    q = A2;
 }
 
 void MINI_BASIC::A3a()
 {
    😢
+   character = Transliterator(stream.get());
    q = A2;
 }
 
 void MINI_BASIC::A3b()
 {
    lex_class_reg = R_BRACKET;
+   Create_Token();
+   character = Transliterator(stream.get());
    q = A3;
 }
 
 void MINI_BASIC::A3c()
 {
    Create_Token();
+   A3b();
    q = A3;
 }
 
 void MINI_BASIC::A3d()
 {
    DA1D();
+   A3c();
    q = A3;
 }
 
@@ -901,24 +944,28 @@ void MINI_BASIC::A3g()
 void MINI_BASIC::B1a()
 {
    😢
+   character = Transliterator(stream.get());
    q = B1;
 }
 
 void MINI_BASIC::B1b()
 {
    Create_Token();
+   B1a();
    q = B1;
 }
 
 void MINI_BASIC::B1c()
 {
    DA3D();
+   B1b();
    q = B1;
 }
 
 void MINI_BASIC::B1d()
 {
    detection_reg++;
+   character = Transliterator(stream.get());
    q = B1;
 }
 
@@ -932,31 +979,36 @@ void MINI_BASIC::B1e()
 void MINI_BASIC::C1a()
 {
    lex_class_reg = NEXT;
+   character = Transliterator(stream.get());
    q = C1;
 }
 
 void MINI_BASIC::C2a()
 {
    lex_class_reg = OPERAND;
+   C2d();
    q = C2;
 }
 
 void MINI_BASIC::C2b()
 {
    Create_Token();
+   C2a();
    q = C2;
 }
 
 void MINI_BASIC::C2d()
 {
    😢
+   character = Transliterator(stream.get());
    q = C2;
 }
 
 void MINI_BASIC::D1a()
 {
    lex_class_reg = OPERAND;
-   😢
+   number_reg = character.value;
+   character = Transliterator(stream.get());
    q = D1;
 }
 
@@ -964,12 +1016,14 @@ void MINI_BASIC::D1b()
 {
    number_reg *= 10;
    😢
+   character = Transliterator(stream.get());
    q = D1;
 }
 
 void MINI_BASIC::D1c()
 {
    Create_Token();
+   D1a();
    q = D1;
 }
 
@@ -978,6 +1032,7 @@ void MINI_BASIC::D2a()
    counter_reg = 1;
    number_reg *= 10;
    😢
+   character = Transliterator(stream.get());
    q = D2;
 }
 
@@ -986,70 +1041,87 @@ void MINI_BASIC::D2b()
 {
    counter_reg = 1;
    😢
+   character = Transliterator(stream.get());
    q = D2;
 }
 
 void MINI_BASIC::D2c()
 {
    counter_reg = 0;
+   character = Transliterator(stream.get());
    q = D2;
 }
 
 void MINI_BASIC::D3a()
 {
    counter_reg = 0;
+   character = Transliterator(stream.get());
    q = D3;
 }
 
 void MINI_BASIC::D4a()
 {
    😢
+   character = Transliterator(stream.get());
    q = D4;
 }
 
 void MINI_BASIC::D5a()
 {
-   char_value_reg = +1;
+   char_class_value_reg = +1;
+   D5b();
    q = D5;
 }
 
 void MINI_BASIC::D5b()
 {
-   😢
+   order_reg = character.value;
+   character = Transliterator(stream.get());
    q = D5;
 }
 
 void MINI_BASIC::D5c()
 {
    order_reg *= 10;
-   😢
+   order_reg = character.value;
+   character = Transliterator(stream.get());
    q = D5;
 }
 
 void MINI_BASIC::D6a()
 {
    Create_Token();
+   lex_class_reg = OPERAND;
+   character = Transliterator(stream.get());
    q = D6;
 }
 
 void MINI_BASIC::E1a()
 {
-
+   lex_class_reg = GOTO;
+   character = Transliterator(stream.get());
+   q = E1;
 }
 
 void MINI_BASIC::E1b()
 {
+   lex_class_reg = GOSUB;
+   character = Transliterator(stream.get());
+   q = E1;
 }
 
 void MINI_BASIC::E2a()
 {
    lex_class_reg = LABLE;
-   number_string_reg = character.value - '0';
+   E2b();
    q = E2;
 }
 
 void MINI_BASIC::E2b()
 {
+   number_string_reg = character.value;
+   character = Transliterator(stream.get());
+   q = E2;
 }
 
 void MINI_BASIC::E2c()
@@ -1057,72 +1129,136 @@ void MINI_BASIC::E2c()
    number_string_reg *= 10;
    number_string_reg += character.value - '0';
    character = Transliterator(stream.get());
+   q = E2;
 }
 
 void MINI_BASIC::F1a()
 {
+   lex_class_reg = FOR;
+   character = Transliterator(stream.get());
+   q = F1;
 }
 
 void MINI_BASIC::F1b()
 {
+   lex_class_reg = TO;
+   character = Transliterator(stream.get());
+   q = F1;
 }
 
 void MINI_BASIC::F2a()
 {
+   😢
+   character = Transliterator(stream.get());
+   q = F2;
 }
 
 void MINI_BASIC::F3a()
 {
+   😢
+   character = Transliterator(stream.get());
+   q = F3;
 }
 
 void MINI_BASIC::G1a()
 {
+   lex_class_reg = COMMENT;
+   Create_Token();
+   character = Transliterator(stream.get());
+   q = G1;
 }
 
 void MINI_BASIC::H1a()
 {
+   relation_value_reg = character.value;
+   lex_class_reg = RELATIONSHIP_OPERATIONS;
+   character = Transliterator(stream.get());
+   q = H1;
 }
 
 void MINI_BASIC::H1b()
 {
+   Create_Token();
+   H1a();
+   q = H1;
 }
 
 void MINI_BASIC::H1c()
 {
+   DA1D();
+   H1b();
+   q = H1;
 }
 
 void MINI_BASIC::H1d()
 {
+   DA2D();
+   H1b();
+   q = H1;
 }
 
 void MINI_BASIC::H1e()
 {
+   DA3D();
+   H1b();
+   q = H1;
 }
 
 void MINI_BASIC::H1f()
 {
+   DA1E();
+   H1b();
+   q = H1;
 }
 
 void MINI_BASIC::M1()
 {
-   for (int i = 0; i < table_first_vector.size(); i++)
-      if (table_first_vector[i][0] == character.value)
-      {
-         character = Transliterator(stream.get());
-         while (true)
+   if (detection_reg == 0)
+   {
+      for (int i = 0; i < table_first_vector.size(); i++)
+         if (table_first_vector[i][0] == character.value)
          {
-            if (character.)
+            detection_reg = table_first_vector[i][1];
+            return;
          }
-      }
+      Error_Handler();
+      return;
+   }
+
+   character = Transliterator(stream.get());
+   if (character.value == table_detection[detection_reg - 1].letter)
+   {
+      (this->*(table_detection[detection_reg - 1].f))();
+      detection_reg++;
+   }
+   else if (table_detection[detection_reg - 1].alt != -1)
+   {
+      detection_reg = table_detection[detection_reg - 1].alt - 1;
+   }
+            
    Error_Handler();
 }
 
 void MINI_BASIC::M2()
 {
+   if (character.value != 'E')
+   {
+      DA1D();
+      B1b();
+   }
+   else
+      D3a();
 }
 
 void MINI_BASIC::M3()
 {
+   if (character.value != 'E')
+   {
+      DA2D();
+      B1b();
+   }
+   else
+      q = D3;
 }
 
 void MINI_BASIC::EXIT1()
@@ -1149,11 +1285,20 @@ void MINI_BASIC::EXIT6()
 {
 }
 
-void MINI_BASIC::Error()
+void MINI_BASIC::Create_Token()
 {
    ;
 }
 
+void MINI_BASIC::Error_Handler()
+{
+   ;
+}
+
+void MINI_BASIC::Error()
+{
+   ;
+}
 
 
 

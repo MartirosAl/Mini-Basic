@@ -3,6 +3,8 @@
 #include <fstream>
 #include <vector>
 #include "Tokens.h"
+#include "hash_tables.h"
+#include "Decimal_fractions.h"
 
 
 
@@ -31,6 +33,8 @@ class MINI_BASIC
    int detection_reg = 0;
    //RK
    int char_class_value_reg = 0;
+   //RI
+   int index_reg = 0;
 
    typedef void(MINI_BASIC::*func) ();
    func q;
@@ -43,8 +47,12 @@ class MINI_BASIC
    //Поток
    ifstream stream;
 
+   Hash_table_internal table_number_string;
+
    //TL
    vector<Token> table_tokens;
+
+   vector<int> table_operands;
 
    SymbolicToken Transliterator(int character);
 
@@ -209,52 +217,71 @@ class MINI_BASIC
 
 
    struct Keyword{
-      char letter;
+      int letter;
       func f;
       int alt;
    };
 
-   vector<vector<int>> table_first_vector
+   vector<int> table_first_vector
    {
-      {'E', 1 },
-      {'F', 3 },
-      {'G', 5 },
-      {'I', 11},
-      {'L', 12},
-      {'N', 14},
-      {'R', 17},
-      {'S', 23},
-      {'T', 26}
+      /*0*/-1,
+      /*A*/0,
+      /*B*/0,
+      /*C*/0,
+      /*D*/0,
+      /*E*/1,
+      /*F*/3,
+      /*G*/5,
+      /*H*/0,
+      /*I*/11,
+      /*J*/0,
+      /*K*/0,
+      /*L*/12,
+      /*M*/0,
+      /*N*/14,
+      /*O*/0,
+      /*P*/0,
+      /*Q*/0,
+      /*R*/17,
+      /*S*/23,
+      /*T*/26,
+      /*U*/0,
+      /*V*/0,
+      /*W*/0,
+      /*X*/0,
+      /*Y*/0,
+      /*Z*/0
    };
 
    vector<Keyword> table_detection
    {
-      /**1*/{'N', B1d, -1},//END
-      /**2*/{'D', A2q, -1},//END
-      /**3*/{'O', B1d, -1},//FOR
-      /**4*/{'R', F1b, -1},//FOR
-      /**5*/{'O', B1d, -1},//GOTO, GOSUB
-      /**6*/{'T', B1d,  8},//GOTO 
-      /**7*/{'O', E1a, -1},//GOSUB
-      /**8*/{'S', B1d, -1},//GOSUB
-      /**9*/{'U', B1d, -1},//GOSUB
-      /*10*/{'B', E1b, -1},//GOSUB
-      /*11*/{'F', A2r, -1},//IF
-      /*12*/{'E', B1d, -1},//LET
-      /*13*/{'T', F1a, -1},//LET
-      /*14*/{'E', B1d, -1},//NEXT
-      /*15*/{'X', B1d, -1},//NEXT
-      /*16*/{'T', C1a, -1},//NEXT
-      /*17*/{'E', B1d, -1},//RETURN, REM
-      /*18*/{'T', B1d, 22},//RETURN
-      /*19*/{'U', B1d, -1},//RETURN
-      /*20*/{'R', B1d, -1},//RETURN
-      /*21*/{'N', A2s, -1},//RETURN
-      /*22*/{'M', G1a, -1},//REM
-      /*23*/{'T', B1d, -1},//STEP
-      /*24*/{'E', B1d, -1},//STEP
-      /*25*/{'P', A2t, -1},//STEP
-      /*26*/{'O', A2u, -1},//TO
+      /**0*/{-1, A1a, -2},
+      /**1*/{14, B1d, -1},//END
+      /**2*/{4, A2q, -1},//END
+      /**3*/{15, B1d, -1},//FOR
+      /**4*/{18, F1b, -1},//FOR
+      /**5*/{15, B1d, -1},//GOTO, GOSUB
+      /**6*/{20, B1d,  8},//GOTO 
+      /**7*/{15, E1a, -1},//GOSUB
+      /**8*/{19, B1d, -1},//GOSUB
+      /**9*/{21, B1d, -1},//GOSUB
+      /*10*/{2, E1b, -1},//GOSUB
+      /*11*/{6, A2r, -1},//IF
+      /*12*/{5, B1d, -1},//LET
+      /*13*/{20, F1a, -1},//LET
+      /*14*/{5, B1d, -1},//NEXT
+      /*15*/{24, B1d, -1},//NEXT
+      /*16*/{20, C1a, -1},//NEXT
+      /*17*/{5, B1d, -1},//RETURN, REM
+      /*18*/{20, B1d, 22},//RETURN
+      /*19*/{21, B1d, -1},//RETURN
+      /*20*/{18, B1d, -1},//RETURN
+      /*21*/{14, A2s, -1},//RETURN
+      /*22*/{13, G1a, -1},//REM
+      /*23*/{20, B1d, -1},//STEP
+      /*24*/{5, B1d, -1},//STEP
+      /*25*/{16, A2t, -1},//STEP
+      /*26*/{15, A2u, -1},//TO
    };
 
   

@@ -10,22 +10,52 @@ SymbolicToken MINI_BASIC::Transliterator(int character)
     if (character >= 'A' && character <= 'Z')
     {
         result.token_class = SymbolicTokenType::LETTER;
-        result.value = (int)character;
+        result.value = character - 'A' + 1;
     }
     else if (character >= '0' && character <= '9')
     {
         result.token_class = SymbolicTokenType::DIGIT;
-        result.value = (int)character;
+        result.value = character - '0' + 1;
     }
-    else if (character == '+' || character == '-' || character == '*' || character == '/' || character == '^')
+    else if (character == '+')
     {
         result.token_class = SymbolicTokenType::ARITHMETIC_OPERATION_S;
-        result.value = (int)character;
+        result.value = 1;
+    }    
+    else if (character == '-')
+    {
+        result.token_class = SymbolicTokenType::ARITHMETIC_OPERATION_S;
+        result.value = 2;
+    }    
+    else if (character == '*')
+    {
+        result.token_class = SymbolicTokenType::ARITHMETIC_OPERATION_S;
+        result.value = 3;
+    }    
+    else if (character == '/')
+    {
+        result.token_class = SymbolicTokenType::ARITHMETIC_OPERATION_S;
+        result.value = 4;
+    }    
+    else if (character == '^')
+    {
+        result.token_class = SymbolicTokenType::ARITHMETIC_OPERATION_S;
+        result.value = 5;
     }
-    else if (character == '<' || character == '>' || character == '=')
+    else if (character == '=')
     {
         result.token_class = SymbolicTokenType::RELATION_S;
-        result.value = (int)character;
+        result.value = 1;
+    }
+    else if (character == '<')
+    {
+       result.token_class = SymbolicTokenType::RELATION_S;
+       result.value = 2;
+    }
+    else if (character == '>')
+    {
+       result.token_class = SymbolicTokenType::RELATION_S;
+       result.value = 3;
     }
     else if (character == '(')
     {
@@ -36,6 +66,11 @@ SymbolicToken MINI_BASIC::Transliterator(int character)
     {
         result.token_class = SymbolicTokenType::C_BRACE_S;
         result.value = (int)character;
+    }
+    else if (character == '.')
+    {
+       result.token_class = SymbolicTokenType::DOT;
+       result.value = (int)character;
     }
     else if (character == ' ' || character == '\t')
     {
@@ -84,6 +119,9 @@ MINI_BASIC::MINI_BASIC(string name_file)
     q = &MINI_BASIC::A1;
     next();
 
+    //Initial table operands
+    for (int i = 1; i <= 286; i++)
+       table_operands[i] = 0;
 
     func prev_func = q;
 
@@ -670,7 +708,7 @@ void MINI_BASIC::H1()
 
 void MINI_BASIC::DA1D()
 {
-   number_reg = 0;
+   order_reg = 0;
    //Вычислить константу
 
 }
@@ -679,6 +717,7 @@ void MINI_BASIC::DA2D()
 {
     order_reg = -counter_reg;
     //Вычислить константу
+
 }
 
 void MINI_BASIC::DA3D()
@@ -691,12 +730,12 @@ void MINI_BASIC::DA3D()
     counter_reg -= order_reg;
 
     //Вычислить константу
-    Внедрить Hash таблицу
+
 }
 
 void MINI_BASIC::DA1E()
 {
-   Внедрить Hash таблицу
+   table_number_string.insert(number_string_reg)
 }
 
 void MINI_BASIC::DA1Ecycle()
@@ -903,7 +942,9 @@ void MINI_BASIC::A2u()
 
 void MINI_BASIC::A3a()
 {
-   😢
+   //имя переменой
+   index_reg += (character.value + 1) * 26;
+   Create_Token();
    next();
    q = A2;
 }
@@ -953,7 +994,7 @@ void MINI_BASIC::A3g()
 
 void MINI_BASIC::B1a()
 {
-   😢
+   detection_reg = table_first_vector[character.value];
    next();
    q = B1;
 }
@@ -1009,7 +1050,7 @@ void MINI_BASIC::C2b()
 
 void MINI_BASIC::C2d()
 {
-   😢
+   index_reg = character.value;
    next();
    q = C2;
 }
@@ -1025,7 +1066,7 @@ void MINI_BASIC::D1a()
 void MINI_BASIC::D1b()
 {
    number_reg *= 10;
-   😢
+   number_reg += character.value;
    next();
    q = D1;
 }
@@ -1041,7 +1082,7 @@ void MINI_BASIC::D2a()
 {
    counter_reg = 1;
    number_reg *= 10;
-   😢
+   number_reg += character.value;
    next();
    q = D2;
 }
@@ -1050,7 +1091,7 @@ void MINI_BASIC::D2a()
 void MINI_BASIC::D2b()
 {
    counter_reg = 1;
-   😢
+   number_reg = character.value;
    next();
    q = D2;
 }
@@ -1071,7 +1112,12 @@ void MINI_BASIC::D3a()
 
 void MINI_BASIC::D4a()
 {
-   😢
+   if (character.value == 1)
+      order_sign_reg = 1;
+   else if (character.value == 2)
+      order_sign_reg = -1;
+   else
+      Error_Handler();
    next();
    q = D4;
 }
@@ -1137,7 +1183,7 @@ void MINI_BASIC::E2b()
 void MINI_BASIC::E2c()
 {
    number_string_reg *= 10;
-   number_string_reg += character.value - '0';
+   number_string_reg += character.value;
    next();
    q = E2;
 }
@@ -1158,14 +1204,14 @@ void MINI_BASIC::F1b()
 
 void MINI_BASIC::F2a()
 {
-   😢
+   index_reg = character.value;
    next();
    q = F2;
 }
 
 void MINI_BASIC::F3a()
 {
-   😢
+   index_reg = (character.value + 1) * 26;
    next();
    q = F3;
 }
@@ -1225,33 +1271,29 @@ void MINI_BASIC::M1()
 {
    if (detection_reg == 0)
    {
-      for (int i = 0; i < table_first_vector.size(); i++)
-         if (table_first_vector[i][0] == character.value)
-         {
-            detection_reg = table_first_vector[i][1];
-            return;
-         }
-      Error_Handler();
-      return;
+      if (table_first_vector[character.value] != 0)
+         detection_reg = table_first_vector[character.value];
+      else
+         Error_Handler();
    }
 
    next();
-   if (character.value == table_detection[detection_reg - 1].letter)
+   if (character.value == table_detection[detection_reg].letter)
    {
-      (this->*(table_detection[detection_reg - 1].f))();
+      (this->*(table_detection[detection_reg].f))();
       detection_reg++;
    }
-   else if (table_detection[detection_reg - 1].alt != -1)
+   else if (table_detection[detection_reg].alt != -1)
    {
-      detection_reg = table_detection[detection_reg - 1].alt - 1;
+      detection_reg = table_detection[detection_reg].alt - 1;
    }
-            
-   Error_Handler();
+   else    
+      Error_Handler();
 }
 
 void MINI_BASIC::M2()
 {
-   if (character.value != 'E')
+   if (character.value != 5)
    {
       DA1D();
       B1b();
@@ -1262,7 +1304,7 @@ void MINI_BASIC::M2()
 
 void MINI_BASIC::M3()
 {
-   if (character.value != 'E')
+   if (character.value != 5)
    {
       DA2D();
       B1b();

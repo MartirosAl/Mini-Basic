@@ -21,7 +21,7 @@ protected:
 public:
    bool flag_work_state = true;
    bool flag_work_print = true;
-   virtual void start(string s) = 0;
+   virtual long double start(string s) = 0;
    void start_with_file(string filename)
    {
       ifstream in(filename);

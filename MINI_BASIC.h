@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cmath>
 #include "Tokens.h"
 #include "hash_tables.h"
 #include "Decimal_fractions.h"
@@ -47,12 +48,28 @@ class MINI_BASIC
    //Поток
    ifstream stream;
 
+   //TS
    Hash_table_internal table_number_string;
+
+   //TO
+   vector<long double> table_operands;
+
+   //NTO
+   int ptr_to_free = 287;
+
+   //Temp for TO
+   Decimal_fractions Dec_number;
 
    //TL
    vector<Token> table_tokens;
 
-   vector<int> table_operands;
+   //Счетчик лексем
+   int counter_tokens = 0;
+
+   //Переменная для хэш-таблицы
+   int index_cur_number;
+
+
 
    SymbolicToken Transliterator(int character);
 
@@ -110,7 +127,7 @@ class MINI_BASIC
    void DA2D();
    void DA3D();
    void DA1E();
-   void DA1Ecycle();
+
 
    void A1a();
    void A1b();

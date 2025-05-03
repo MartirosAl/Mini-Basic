@@ -29,7 +29,7 @@ const map<string, TokenType> table_detection
 struct Token
 {
    TokenType type = start;
-   string value;
+   int value;
 };
 
 enum SymbolicTokenType

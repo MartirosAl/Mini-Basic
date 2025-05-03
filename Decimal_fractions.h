@@ -93,20 +93,21 @@ public:
       q = &Decimal_fractions::q2;
    }
 
-   void k1()
+   long double k1()
    {
-      cout << register_number << endl;
+      return stold(register_number);
    }
 
-   void k2()
+   long double k2()
    {
-      
+      string temp;
       if (((int)register_number.size()) - register_count <= 0)
       {
-         cout << "0.";
+         temp = "0.";
+
          for (int i = 0; i < abs((int)register_number.size() - register_count)-1; i++)
-            cout << '0';
-         cout << register_number << endl;
+            temp += '0';
+         return stold(temp += register_number);
          
       }
       else
@@ -121,11 +122,11 @@ public:
          temp.resize(register_count);     
          reverse(temp.begin(), temp.end());
 
-         cout << register_number << '.' << temp << endl;
+         return stold(register_number + '.' + temp);
       }
    }
 
-   void k3()
+   long double k3()
    {
       if (register_sign == -1)
          register_count += stoi(register_order);
@@ -134,18 +135,18 @@ public:
       
       if (register_count > 0)
       {
-         k2();
+         return k2();
       }
       else
       {
          
          for (int i = 0; i < abs(register_count); i++)
             register_number += '0';
-         cout << register_number << endl;
+         return stold(register_number);
       }
    }
 
-   void start(string s)
+   long double start(string s)
    {
       q = &Decimal_fractions::q0;
       str = s;
@@ -161,11 +162,11 @@ public:
       }
 
       if (q == &Decimal_fractions::q1)
-         k1();
+         return k1();
       else if (q == &Decimal_fractions::q2)
-         k2();
+         return k2();
       else if (q == &Decimal_fractions::q5)
-         k3();
+         return k3();
       else
          cout << "Bad" << endl;
 

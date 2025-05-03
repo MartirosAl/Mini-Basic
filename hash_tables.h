@@ -4,10 +4,10 @@
 #include <map>
 using namespace std;
 
-// mod 269
+// mod 100
 int standart(int a)
 {
-   return a % 269;
+   return a % 100;
 }
 
 // Функция для определения ближайшего простого числа, не меньшего заданного
@@ -203,6 +203,20 @@ class Hash_table_internal
        return 0;
    }
 
+   int Alt_find_and_return_index(int a)
+   {
+      size_t transp = function(a) + 1;
+
+      while (table[transp].alt != 0)
+      {
+         transp = table[transp].alt;
+         if (table[transp].value == a)
+            return table[transp].index;
+      }
+
+      return -1;
+   }
+
 public:
 
    //По умолчанию функция mod 269, st = 1361
@@ -250,6 +264,13 @@ public:
 
    }
 
+   int insert_index(int a, int ind)
+   {
+      table[function(a) + 1].index = ind;
+
+      return (function(a) + 1);
+   }
+
    void remove(int a)
    {
       if (!find(a))
@@ -273,6 +294,18 @@ public:
        {
            return Alt_find(a);
        }
+   }
+
+   int find_and_return_index(int a)
+   {
+      if (table[function(a) + 1].value == a)
+      {
+         return table[function(a) + 1].index;
+      }
+      else
+      {
+         return Alt_find_and_return_index(a);
+      }
    }
 
    //true - если нашел

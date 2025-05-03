@@ -4,7 +4,6 @@
 
 SymbolicToken MINI_BASIC::Transliterator(int character)
 {
-   
     SymbolicToken result;
     result.value = 0;
     if (character >= 'A' && character <= 'Z')
@@ -709,14 +708,39 @@ void MINI_BASIC::H1()
 void MINI_BASIC::DA1D()
 {
    order_reg = 0;
-   //Вычислить константу
 
+   table_operands[ptr_to_free] = number_reg;
+   ptr_to_free++;
+   
 }
 
 void MINI_BASIC::DA2D()
 {
-    order_reg = -counter_reg;
-    //Вычислить константу
+
+    string temp;
+    if (to_string(number_reg).length() - counter_reg <= 0)
+    {
+       temp = "0.";
+
+       for (int i = 0; i < abs((int)to_string(number_reg).length() - counter_reg) - 1; i++)
+          temp += '0';
+       table_operands[ptr_to_free] = stold(temp + to_string(number_reg));
+
+    }
+    else
+    {
+       temp = to_string(number_reg);
+       reverse(temp.begin(), temp.end());
+
+
+       number_reg /= pow(10, (to_string(number_reg).length() - counter_reg));
+
+       temp.resize(counter_reg);
+       reverse(temp.begin(), temp.end());
+
+       table_operands[ptr_to_free] = stold(to_string(number_reg) + '.' + temp);
+    }
+    ptr_to_free++;
 
 }
 
@@ -728,20 +752,27 @@ void MINI_BASIC::DA3D()
     }
 
     counter_reg -= order_reg;
+    string temp = '\0';
+    if (counter_reg > 0)
+    {
+       DA2D();
+    }
+    else
+    {
 
-    //Вычислить константу
+       for (int i = 0; i < abs(counter_reg); i++)
+          temp += '0';
+       table_operands[ptr_to_free] = stold(to_string(number_reg) + temp);
+       ptr_to_free++;
+    }
 
 }
 
 void MINI_BASIC::DA1E()
 {
-   table_number_string.insert(number_string_reg)
+   index_cur_number = table_number_string.insert(number_string_reg);
 }
 
-void MINI_BASIC::DA1Ecycle()
-{
-    ....
-}
 
 void MINI_BASIC::A1a()
 {
@@ -1080,7 +1111,7 @@ void MINI_BASIC::D1c()
 
 void MINI_BASIC::D2a()
 {
-   counter_reg = 1;
+   counter_reg += 1;
    number_reg *= 10;
    number_reg += character.value;
    next();
@@ -1351,12 +1382,55 @@ void MINI_BASIC::EXIT6()
 
 void MINI_BASIC::Create_Token()
 {
-   ;
+   Token T;
+   T.type = lex_class_reg;
+   counter_tokens++;
+
+   switch (lex_class_reg)
+   {
+   case LABLE:
+      T.value = table_number_string.insert_index(number_string_reg, counter_tokens);
+      break;
+
+   case OPERAND:
+      T.value = ptr_to_free - 1;
+      break;
+
+   case GOTO:
+   case GOSUB:
+      T.value = table_number_string.find(number_string_reg);
+      break;
+
+   case LET:
+   case FOR:
+   case NEXT:
+      T.value = ptr_to_free;
+      break;
+
+   case ARITHMETIC_OPERATIONS:
+   case RELATIONSHIP_OPERATIONS:
+   case L_BRACKET:
+   case R_BRACKET:
+   case IF:
+   case RETURN:
+   case END:
+   case TO:
+   case STEP:
+   case REM:
+   case ERROR:
+   case END_OF_FILE:
+   case COMMENT:
+      T.value = character.value;
+      break;
+   }
+
+   table_tokens.push_back(T);
 }
 
 void MINI_BASIC::Error_Handler()
 {
-   ;
+   cout << "JOPA" << endl;
+   q = Error;
 }
 
 void MINI_BASIC::Error()

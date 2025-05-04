@@ -10,6 +10,11 @@ enum TokenType
    NEXT, LET, FOR, GOTO, GOSUB, L_BRACKET, R_BRACKET, IF, RETURN, END, TO, STEP, REM, ERROR, END_OF_FILE, COMMENT
 };
 
+const vector<string> TokenTypeString
+{
+    "LABLE", "OPERAND", "ARITHMETIC_OPERATIONS", "RELATIONSHIP_OPERATIONS", "NEXT", "LET", "FOR", "GOTO", "GOSUB", "L_BRACKET", "R_BRACKET", "IF", "RETURN", "END", "TO", "STEP", "REM", "ERROR", "END_OF_FILE", "COMMENT"
+};
+
 enum Arithmetic_Operations
 {
    PLUS, MINUS, MULT, DIV, XOR

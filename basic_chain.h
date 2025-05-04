@@ -12,11 +12,11 @@ protected:
    //RCH
    string register_number;
    //RS
-   int register_count;
+   int register_count = 0;
    //RP
    string register_order;
    //RZ
-   int register_sign;
+   int register_sign = 0;
 
 public:
    bool flag_work_state = true;

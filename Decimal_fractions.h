@@ -156,7 +156,7 @@ public:
       {
          (this->*q)(str[i]);
          if (q == &Decimal_fractions::Error1)
-            return;
+            return 0;
          if (flag_work_state)
             cout << str[i] << endl;
       }
@@ -169,6 +169,7 @@ public:
          return k3();
       else
          cout << "Bad" << endl;
+      return 0;
 
    }
 

@@ -14,7 +14,7 @@ SymbolicToken MINI_BASIC::Transliterator(int character)
     else if (character >= '0' && character <= '9')
     {
         result.token_class = SymbolicTokenType::DIGIT;
-        result.value = character - '0' + 1;
+        result.value = character - '0';
     }
     else if (character == '+')
     {
@@ -96,10 +96,9 @@ SymbolicToken MINI_BASIC::Transliterator(int character)
 
 void MINI_BASIC::next()
 {
-   char temp;
-   stream.get(temp);
-   character = Transliterator(temp);
+   character = Transliterator(stream.get());
 }
+
 
 MINI_BASIC::MINI_BASIC(string name_file)
 {
@@ -111,6 +110,7 @@ MINI_BASIC::MINI_BASIC(string name_file)
         return;
     }
 
+
     //Tests flags
     bool flag_work_state = false;
 
@@ -119,32 +119,122 @@ MINI_BASIC::MINI_BASIC(string name_file)
     next();
 
     //Initial table operands
-    for (int i = 1; i <= 286; i++)
-       table_operands[i] = 0;
+    table_operands.assign(287, 0);
 
     func prev_func = q;
 
     while (true)
     {
+       if (flag_work_state)
+          cout << character.value << endl;
         (this->*q)();
         if (q == &MINI_BASIC::Error)
             return;
-        if (flag_work_state)
-            cout << character.value << endl;
+        
 
-        if (q == &MINI_BASIC::A3)
+        if (q == &MINI_BASIC::EXIT1 || q == &MINI_BASIC::EXIT2 || q == &MINI_BASIC::EXIT3 || q == &MINI_BASIC::EXIT4 || q == &MINI_BASIC::EXIT5 || q == &MINI_BASIC::EXIT6)
         {
-            cout << "Goodbye World!" << endl;
-            break;
+           cout << "Code 0";
+           return;
         }
 
-        //if (prev_func != q)
-        //{
-        //   next();
-        //   prev_func = q;
-        //}
     }
 
+}
+
+void MINI_BASIC::Print_table_token()
+{
+   for (int i = 0; i < table_tokens.size(); i++)
+   {
+      cout << TokenTypeString[table_tokens[i].type] << " ";
+      switch (table_tokens[i].type)
+      {
+
+      case LABLE:
+         cout << table_number_string[table_tokens[i].value];
+         break;
+
+      case OPERAND:
+         if (table_tokens[i].value <= 286)
+            cout << table_tokens[i].value;
+         else
+            cout << table_operands[table_tokens[i].value];
+         break;
+
+      case GOTO:
+      case GOSUB:
+         cout << table_number_string.find(table_tokens[i].value);
+         break;
+
+      case LET:
+      case FOR:
+      case NEXT:
+         cout << table_operands[table_tokens[i].value];
+         break;
+
+      case RELATIONSHIP_OPERATIONS:
+         switch (table_tokens[i].value)
+         {
+         case(1):
+            cout << '=';
+            break;
+         case(2):
+            cout << '<';
+            break;
+         case(3):
+            cout << '>';
+            break;
+         case(4):
+            cout << "<=";
+            break;
+         case(5):
+            cout << ">=";
+            break;
+         case(6):
+            cout << "<>";
+            break;
+         }
+         break;
+      case ARITHMETIC_OPERATIONS:
+         switch (table_tokens[i].value)
+         {
+         case(1):
+             cout << '+';
+             break;
+         case(2):
+             cout << '-';
+             break;
+         case(3):
+             cout << '*';
+             break;
+         case(4):
+             cout << '/';
+             break;
+         case(5):
+             cout << '^';
+             break;
+         }
+         break;
+      case L_BRACKET:
+         cout << '(';
+         break;
+      case R_BRACKET:
+         cout << ')';
+         break;
+      case IF:
+      case RETURN:
+      case END:
+      case TO:
+      case STEP:
+      case REM:
+      case ERROR:
+      case END_OF_FILE:
+      case COMMENT:
+         ;
+         break;
+      }
+      cout << endl;
+   }
 }
 
 //начало строки
@@ -157,13 +247,14 @@ void MINI_BASIC::A1()
       break;
    case SPACE:
       next();
-      q = A1;
+      q = &MINI_BASIC::A1;
       break;
    case LF:
-      q = A1;
+      next();
+      q = &MINI_BASIC::A1;
       break;
    case END_OF_FILE_S:
-      q = EXIT1;
+      q = &MINI_BASIC::EXIT1;
       break;
    default:
       Error();
@@ -195,17 +286,17 @@ void MINI_BASIC::A2()
       A3b();
       break;
    case DOT:
-      q = D6;
+      q = &MINI_BASIC::D6;
       break;
    case SPACE:
       next();
-      q = A2;
+      q = &MINI_BASIC::A2;
       break;
    case LF:
-      q = A1;
+      q = &MINI_BASIC::A1;
       break;
    case END_OF_FILE_S:
-      q = EXIT1;
+      q = &MINI_BASIC::EXIT1;
       break;
    default:
       Error();
@@ -237,17 +328,17 @@ void MINI_BASIC::A3()
       A3b();
       break;
    case DOT:
-      q = D6;
+      q = &MINI_BASIC::D6;
       break;
    case SPACE:
       next();
-      q = A3;
+      q = &MINI_BASIC::A3;
       break;
    case LF:
-      q = A1;
+      q = &MINI_BASIC::A1;
       break;
    case END_OF_FILE_S:
-      q = EXIT1;
+      q = &MINI_BASIC::EXIT1;
       break;
    default:
       Error();
@@ -265,7 +356,7 @@ void MINI_BASIC::B1()
       break;
    case SPACE:
       next();
-      q = B1;
+      q = &MINI_BASIC::B1;
       break;
    default:
       Error();
@@ -283,10 +374,10 @@ void MINI_BASIC::C1()
       break;
    case SPACE:
       next();
-      q = C1;
+      q = &MINI_BASIC::C1;
       break;
    case END_OF_FILE_S:
-      q = EXIT3;
+      q = &MINI_BASIC::EXIT3;
       break;
    default:
       Error();
@@ -319,13 +410,13 @@ void MINI_BASIC::C2()
       break;
    case SPACE:
       next();
-      q = C2;
+      q = &MINI_BASIC::C2;
       break;
    case LF:
       A1a();
       break;
    case END_OF_FILE_S:
-      q = EXIT4;
+      q = &MINI_BASIC::EXIT4;
       break;
    default:
       Error();
@@ -361,13 +452,13 @@ void MINI_BASIC::D1()
       break;
    case SPACE:
       next();
-      q = D2;
+      q = &MINI_BASIC::D2;
       break;
    case LF:
       A1b();
       break;
    case END_OF_FILE_S:
-      q = EXIT3;
+      q = &MINI_BASIC::EXIT3;
       break;
    default:
       Error();
@@ -400,13 +491,13 @@ void MINI_BASIC::D2()
       break;
    case SPACE:
       next();
-      q = D2;
+      q = &MINI_BASIC::D2;
       break;
    case LF:
       A1c();
       break;
    case END_OF_FILE_S:
-      q = EXIT4;
+      q = &MINI_BASIC::EXIT4;
       break;
    default:
       Error();
@@ -427,7 +518,7 @@ void MINI_BASIC::D3()
       break;
    case SPACE:
       next();
-      q = D3;
+      q = &MINI_BASIC::D3;
       break;
    default:
       Error();
@@ -445,7 +536,7 @@ void MINI_BASIC::D4()
       break;
    case SPACE:
       next();
-      q = D4;
+      q = &MINI_BASIC::D4;
       break;
    default:
       Error();
@@ -478,13 +569,13 @@ void MINI_BASIC::D5()
       break;
    case SPACE:
       next();
-      q = D5;
+      q = &MINI_BASIC::D5;
       break;
    case LF:
       A1d();
       break;
    case END_OF_FILE_S:
-      q = EXIT5;
+      q = &MINI_BASIC::EXIT5;
       break;
    default:
       Error();
@@ -502,8 +593,9 @@ void MINI_BASIC::D6()
       break;
    case SPACE:
       lex_class_reg = OPERAND;
+      flag_operand = 1;
       next();
-      q = D6;
+      q = &MINI_BASIC::D6;
       break;
    default:
       Error();
@@ -521,7 +613,8 @@ void MINI_BASIC::E1()
       break;
    case SPACE:
       next();
-      q = E1;
+      q = &MINI_BASIC::E1;
+      break;
    default:
       Error();
       break;
@@ -553,11 +646,13 @@ void MINI_BASIC::E2()
       break;
    case SPACE:
       next();
-      q = E2;
+      q = &MINI_BASIC::E2;
       break;
    case LF:
       A1e();
       break;
+   case END_OF_FILE_S:
+      EXIT6();
    default:
       Error();
       break;
@@ -574,7 +669,7 @@ void MINI_BASIC::F1()
       break;
    case SPACE:
       next();
-      q = F1;
+      q = &MINI_BASIC::F1;
       break;
    default:
       Error();
@@ -595,7 +690,7 @@ void MINI_BASIC::F2()
       break;
    case SPACE:
       next();
-      q = F2;
+      q = &MINI_BASIC::F2;
       break;
    default:
       Error();
@@ -613,7 +708,7 @@ void MINI_BASIC::F3()
       break;
    case SPACE:
       next();
-      q = F3;
+      q = &MINI_BASIC::F3;
       break;
    default:
       Error();
@@ -627,35 +722,35 @@ void MINI_BASIC::G1()
    switch (character.token_class)
    {
    case LETTER:
-      q = G1;
+      q = &MINI_BASIC::G1;
       break;
    case DIGIT:
-      q = G1;
+      q = &MINI_BASIC::G1;
       break;
    case ARITHMETIC_OPERATION_S:
-      q = G1;
+      q = &MINI_BASIC::G1;
       break;
    case RELATION_S:
-      q = G1;
+      q = &MINI_BASIC::G1;
       break;
    case O_BRACE_S:
-      q = G1;
+      q = &MINI_BASIC::G1;
       break;
    case C_BRACE_S:
-      q = G1;
+      q = &MINI_BASIC::G1;
       break;
    case DOT:
-      q = G1;
+      q = &MINI_BASIC::G1;
       break;
    case SPACE:
       next();
-      q = G1;
+      q = &MINI_BASIC::G1;
       break;
    case LF:
-      q = A1;
+      q = &MINI_BASIC::A1;
       break;
    case END_OF_FILE_S:
-      q = EXIT1;
+      q = &MINI_BASIC::EXIT1;
       break;
    default:
       Error();
@@ -691,13 +786,13 @@ void MINI_BASIC::H1()
       break;
    case SPACE:
       next();
-      q = H1;
+      q = &MINI_BASIC::H1;
       break;
    case LF:
       A1a();
       break;
    case END_OF_FILE_S:
-      q = EXIT1;
+      q = &MINI_BASIC::EXIT1;
       break;
    default:
       Error();
@@ -709,7 +804,7 @@ void MINI_BASIC::DA1D()
 {
    order_reg = 0;
 
-   table_operands[ptr_to_free] = number_reg;
+   table_operands.push_back(number_reg);
    ptr_to_free++;
    
 }
@@ -724,7 +819,7 @@ void MINI_BASIC::DA2D()
 
        for (int i = 0; i < abs((int)to_string(number_reg).length() - counter_reg) - 1; i++)
           temp += '0';
-       table_operands[ptr_to_free] = stold(temp + to_string(number_reg));
+       table_operands.push_back(stold(temp + to_string(number_reg)));
 
     }
     else
@@ -738,7 +833,7 @@ void MINI_BASIC::DA2D()
        temp.resize(counter_reg);
        reverse(temp.begin(), temp.end());
 
-       table_operands[ptr_to_free] = stold(to_string(number_reg) + '.' + temp);
+       table_operands.push_back(stold(to_string(number_reg) + '.' + temp));
     }
     ptr_to_free++;
 
@@ -752,7 +847,7 @@ void MINI_BASIC::DA3D()
     }
 
     counter_reg -= order_reg;
-    string temp = '\0';
+    string temp = "\0";
     if (counter_reg > 0)
     {
        DA2D();
@@ -762,7 +857,7 @@ void MINI_BASIC::DA3D()
 
        for (int i = 0; i < abs(counter_reg); i++)
           temp += '0';
-       table_operands[ptr_to_free] = stold(to_string(number_reg) + temp);
+       table_operands.push_back(stold(to_string(number_reg) + temp));
        ptr_to_free++;
     }
 
@@ -778,84 +873,84 @@ void MINI_BASIC::A1a()
 {
     Create_Token();
     next();
-    q = A1;
+    q = &MINI_BASIC::A1;
 }
 
 void MINI_BASIC::A1b()
 {
     DA1D();
     A1a();
-    q = A1;
+    q = &MINI_BASIC::A1;
 }
 
 void MINI_BASIC::A1c()
 {
     DA2D();
     A1a();
-    q = A1;
+    q = &MINI_BASIC::A1;
 }
 
 void MINI_BASIC::A1d()
 {
     DA3D();
     A1a();
-    q = A1;
+    q = &MINI_BASIC::A1;
 }
 
 void MINI_BASIC::A1e()
 {
     DA1E();
     A1a();
-    q = A1;
+    q = &MINI_BASIC::A1;
 }
 
 void MINI_BASIC::A2a()
 {
     lex_class_reg = ARITHMETIC_OPERATIONS;
     A2b();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2b()
 {
     Create_Token();
     next();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2c()
 {
     DA1D();
     A2g();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2d()
 {
     DA2D();
     A2g();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2e()
 {
     DA3D();
     A2g();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2f()
 {
     DA1E();
     A2g();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2g()
 {
     Create_Token();
     A2a();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2h()
@@ -863,42 +958,42 @@ void MINI_BASIC::A2h()
     lex_class_reg = L_BRACKET;
     Create_Token();
     next();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2j()
 {
     DA1E();
     A2k();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2k()
 {
     Create_Token();
     A2h();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2l()
 {
     DA1D();
     A2k();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2m()
 {
     DA2D();
     A2k();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2n()
 {
     DA3D();
     A2k();
-    q = A2;
+    q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2o()
@@ -910,7 +1005,7 @@ void MINI_BASIC::A2o()
       Error_Handler();
       return;
    }
-   q = A2;
+   q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2p()
@@ -933,42 +1028,42 @@ void MINI_BASIC::A2p()
          Error_Handler();
    }
    A2b();
-   q = A2;
+   q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2q()
 {
    lex_class_reg = END;
    A2b();
-   q = A2;
+   q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2r()
 {
    lex_class_reg = IF;
    A2b();
-   q = A2;
+   q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2s()
 {
    lex_class_reg = RETURN;
    A2b();
-   q = A2;
+   q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2t()
 {
    lex_class_reg = STEP;
    A2b();
-   q = A2;
+   q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A2u()
 {
    lex_class_reg = TO;
    A2b();
-   q = A2;
+   q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A3a()
@@ -977,7 +1072,7 @@ void MINI_BASIC::A3a()
    index_reg += (character.value + 1) * 26;
    Create_Token();
    next();
-   q = A2;
+   q = &MINI_BASIC::A2;
 }
 
 void MINI_BASIC::A3b()
@@ -985,113 +1080,115 @@ void MINI_BASIC::A3b()
    lex_class_reg = R_BRACKET;
    Create_Token();
    next();
-   q = A3;
+   q = &MINI_BASIC::A3;
 }
 
 void MINI_BASIC::A3c()
 {
    Create_Token();
    A3b();
-   q = A3;
+   q = &MINI_BASIC::A3;
 }
 
 void MINI_BASIC::A3d()
 {
    DA1D();
    A3c();
-   q = A3;
+   q = &MINI_BASIC::A3;
 }
 
 void MINI_BASIC::A3e()
 {
    DA2D();
    A3c();
-   q = A3;
+   q = &MINI_BASIC::A3;
 }
 
 void MINI_BASIC::A3f()
 {
    DA3D();
    A3c();
-   q = A3;
+   q = &MINI_BASIC::A3;
 }
 
 void MINI_BASIC::A3g()
 {
    DA1E();
    A3c();
-   q = A3;
+   q = &MINI_BASIC::A3;
 }
 
 void MINI_BASIC::B1a()
 {
    detection_reg = table_first_vector[character.value];
    next();
-   q = B1;
+   q = &MINI_BASIC::B1;
 }
 
 void MINI_BASIC::B1b()
 {
    Create_Token();
    B1a();
-   q = B1;
+   q = &MINI_BASIC::B1;
 }
 
 void MINI_BASIC::B1c()
 {
    DA3D();
    B1b();
-   q = B1;
+   q = &MINI_BASIC::B1;
 }
 
 void MINI_BASIC::B1d()
 {
    detection_reg++;
    next();
-   q = B1;
+   q = &MINI_BASIC::B1;
 }
 
 void MINI_BASIC::B1e()
 {
    DA1E();
    B1b();
-   q = B1;
+   q = &MINI_BASIC::B1;
 }
 
 void MINI_BASIC::C1a()
 {
    lex_class_reg = NEXT;
    next();
-   q = C1;
+   q = &MINI_BASIC::C1;
 }
 
 void MINI_BASIC::C2a()
 {
    lex_class_reg = OPERAND;
+   flag_operand = 0;
    C2d();
-   q = C2;
+   q = &MINI_BASIC::C2;
 }
 
 void MINI_BASIC::C2b()
 {
    Create_Token();
    C2a();
-   q = C2;
+   q = &MINI_BASIC::C2;
 }
 
 void MINI_BASIC::C2d()
 {
    index_reg = character.value;
    next();
-   q = C2;
+   q = &MINI_BASIC::C2;
 }
 
 void MINI_BASIC::D1a()
 {
    lex_class_reg = OPERAND;
    number_reg = character.value;
+   flag_operand = 1;
    next();
-   q = D1;
+   q = &MINI_BASIC::D1;
 }
 
 void MINI_BASIC::D1b()
@@ -1099,14 +1196,14 @@ void MINI_BASIC::D1b()
    number_reg *= 10;
    number_reg += character.value;
    next();
-   q = D1;
+   q = &MINI_BASIC::D1;
 }
 
 void MINI_BASIC::D1c()
 {
    Create_Token();
    D1a();
-   q = D1;
+   q = &MINI_BASIC::D1;
 }
 
 void MINI_BASIC::D2a()
@@ -1115,7 +1212,7 @@ void MINI_BASIC::D2a()
    number_reg *= 10;
    number_reg += character.value;
    next();
-   q = D2;
+   q = &MINI_BASIC::D2;
 }
 
 //🔥🔥🔥🔥🔥🔥🧯
@@ -1124,21 +1221,21 @@ void MINI_BASIC::D2b()
    counter_reg = 1;
    number_reg = character.value;
    next();
-   q = D2;
+   q = &MINI_BASIC::D2;
 }
 
 void MINI_BASIC::D2c()
 {
    counter_reg = 0;
    next();
-   q = D2;
+   q = &MINI_BASIC::D2;
 }
 
 void MINI_BASIC::D3a()
 {
    counter_reg = 0;
    next();
-   q = D3;
+   q = &MINI_BASIC::D3;
 }
 
 void MINI_BASIC::D4a()
@@ -1150,21 +1247,21 @@ void MINI_BASIC::D4a()
    else
       Error_Handler();
    next();
-   q = D4;
+   q = &MINI_BASIC::D4;
 }
 
 void MINI_BASIC::D5a()
 {
    char_class_value_reg = +1;
    D5b();
-   q = D5;
+   q = &MINI_BASIC::D5;
 }
 
 void MINI_BASIC::D5b()
 {
    order_reg = character.value;
    next();
-   q = D5;
+   q = &MINI_BASIC::D5;
 }
 
 void MINI_BASIC::D5c()
@@ -1172,43 +1269,44 @@ void MINI_BASIC::D5c()
    order_reg *= 10;
    order_reg = character.value;
    next();
-   q = D5;
+   q = &MINI_BASIC::D5;
 }
 
 void MINI_BASIC::D6a()
 {
    Create_Token();
    lex_class_reg = OPERAND;
+   flag_operand = 1;
    next();
-   q = D6;
+   q = &MINI_BASIC::D6;
 }
 
 void MINI_BASIC::E1a()
 {
    lex_class_reg = GOTO;
    next();
-   q = E1;
+   q = &MINI_BASIC::E1;
 }
 
 void MINI_BASIC::E1b()
 {
    lex_class_reg = GOSUB;
    next();
-   q = E1;
+   q = &MINI_BASIC::E1;
 }
 
 void MINI_BASIC::E2a()
 {
    lex_class_reg = LABLE;
    E2b();
-   q = E2;
+   q = &MINI_BASIC::E2;
 }
 
 void MINI_BASIC::E2b()
 {
    number_string_reg = character.value;
    next();
-   q = E2;
+   q = &MINI_BASIC::E2;
 }
 
 void MINI_BASIC::E2c()
@@ -1216,35 +1314,35 @@ void MINI_BASIC::E2c()
    number_string_reg *= 10;
    number_string_reg += character.value;
    next();
-   q = E2;
+   q = &MINI_BASIC::E2;
 }
 
 void MINI_BASIC::F1a()
 {
    lex_class_reg = FOR;
    next();
-   q = F1;
+   q = &MINI_BASIC::F1;
 }
 
 void MINI_BASIC::F1b()
 {
    lex_class_reg = TO;
    next();
-   q = F1;
+   q = &MINI_BASIC::F1;
 }
 
 void MINI_BASIC::F2a()
 {
    index_reg = character.value;
    next();
-   q = F2;
+   q = &MINI_BASIC::F2;
 }
 
 void MINI_BASIC::F3a()
 {
    index_reg = (character.value + 1) * 26;
    next();
-   q = F3;
+   q = &MINI_BASIC::F3;
 }
 
 void MINI_BASIC::G1a()
@@ -1252,7 +1350,7 @@ void MINI_BASIC::G1a()
    lex_class_reg = COMMENT;
    Create_Token();
    next();
-   q = G1;
+   q = &MINI_BASIC::G1;
 }
 
 void MINI_BASIC::H1a()
@@ -1260,42 +1358,42 @@ void MINI_BASIC::H1a()
    relation_value_reg = character.value;
    lex_class_reg = RELATIONSHIP_OPERATIONS;
    next();
-   q = H1;
+   q = &MINI_BASIC::H1;
 }
 
 void MINI_BASIC::H1b()
 {
    Create_Token();
    H1a();
-   q = H1;
+   q = &MINI_BASIC::H1;
 }
 
 void MINI_BASIC::H1c()
 {
    DA1D();
    H1b();
-   q = H1;
+   q = &MINI_BASIC::H1;
 }
 
 void MINI_BASIC::H1d()
 {
    DA2D();
    H1b();
-   q = H1;
+   q = &MINI_BASIC::H1;
 }
 
 void MINI_BASIC::H1e()
 {
    DA3D();
    H1b();
-   q = H1;
+   q = &MINI_BASIC::H1;
 }
 
 void MINI_BASIC::H1f()
 {
    DA1E();
    H1b();
-   q = H1;
+   q = &MINI_BASIC::H1;
 }
 
 void MINI_BASIC::M1()
@@ -1308,11 +1406,10 @@ void MINI_BASIC::M1()
          Error_Handler();
    }
 
-   next();
+
    if (character.value == table_detection[detection_reg].letter)
    {
       (this->*(table_detection[detection_reg].f))();
-      detection_reg++;
    }
    else if (table_detection[detection_reg].alt != -1)
    {
@@ -1341,7 +1438,7 @@ void MINI_BASIC::M3()
       B1b();
    }
    else
-      q = D3;
+      q = &MINI_BASIC::D3;
 }
 
 void MINI_BASIC::EXIT1()
@@ -1389,11 +1486,18 @@ void MINI_BASIC::Create_Token()
    switch (lex_class_reg)
    {
    case LABLE:
-      T.value = table_number_string.insert_index(number_string_reg, counter_tokens);
+      T.value = index_cur_number;
       break;
 
    case OPERAND:
-      T.value = ptr_to_free - 1;
+      
+      if (flag_operand == 0)  //Переменная
+      {
+         table_operands[index_reg] = 1;
+         T.value = index_reg;
+      }
+      else                    //Константа
+         T.value = ptr_to_free - 1;
       break;
 
    case GOTO:
@@ -1407,8 +1511,10 @@ void MINI_BASIC::Create_Token()
       T.value = ptr_to_free;
       break;
 
-   case ARITHMETIC_OPERATIONS:
    case RELATIONSHIP_OPERATIONS:
+      T.value = relation_value_reg;
+      break;
+   case ARITHMETIC_OPERATIONS:
    case L_BRACKET:
    case R_BRACKET:
    case IF:
@@ -1430,12 +1536,12 @@ void MINI_BASIC::Create_Token()
 void MINI_BASIC::Error_Handler()
 {
    cout << "JOPA" << endl;
-   q = Error;
+   q = &MINI_BASIC::Error;
 }
 
 void MINI_BASIC::Error()
 {
-   ;
+   q = &MINI_BASIC::Error;
 }
 
 

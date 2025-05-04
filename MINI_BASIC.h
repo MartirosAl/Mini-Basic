@@ -15,7 +15,7 @@ class MINI_BASIC
    //Файл с ошибками
    std::ofstream error_list;   
    //RSTR
-   int number_string_reg;
+   int number_string_reg = 0;
    //RCH
    double number_reg = 0; 
    //RZ
@@ -67,15 +67,17 @@ class MINI_BASIC
    int counter_tokens = 0;
 
    //Переменная для хэш-таблицы
-   int index_cur_number;
+   int index_cur_number = 0;
 
+   //Флаг для операнда (переменная / константа)
+   bool flag_operand = 0;
 
 
    SymbolicToken Transliterator(int character);
 
    void next();
 
-
+   
 
 
    //states
@@ -272,41 +274,41 @@ class MINI_BASIC
 
    vector<Keyword> table_detection
    {
-      /**0*/{-1, A1a, -2},
-      /**1*/{14, B1d, -1},//END
-      /**2*/{4, A2q, -1},//END
-      /**3*/{15, B1d, -1},//FOR
-      /**4*/{18, F1b, -1},//FOR
-      /**5*/{15, B1d, -1},//GOTO, GOSUB
-      /**6*/{20, B1d,  8},//GOTO 
-      /**7*/{15, E1a, -1},//GOSUB
-      /**8*/{19, B1d, -1},//GOSUB
-      /**9*/{21, B1d, -1},//GOSUB
-      /*10*/{2, E1b, -1},//GOSUB
-      /*11*/{6, A2r, -1},//IF
-      /*12*/{5, B1d, -1},//LET
-      /*13*/{20, F1a, -1},//LET
-      /*14*/{5, B1d, -1},//NEXT
-      /*15*/{24, B1d, -1},//NEXT
-      /*16*/{20, C1a, -1},//NEXT
-      /*17*/{5, B1d, -1},//RETURN, REM
-      /*18*/{20, B1d, 22},//RETURN
-      /*19*/{21, B1d, -1},//RETURN
-      /*20*/{18, B1d, -1},//RETURN
-      /*21*/{14, A2s, -1},//RETURN
-      /*22*/{13, G1a, -1},//REM
-      /*23*/{20, B1d, -1},//STEP
-      /*24*/{5, B1d, -1},//STEP
-      /*25*/{16, A2t, -1},//STEP
-      /*26*/{15, A2u, -1},//TO
+      /**0*/{-1, &MINI_BASIC::A1a, -2},
+      /**1*/{14, &MINI_BASIC::B1d, -1},//END
+      /**2*/{4,  &MINI_BASIC::A2q, -1},//END
+      /**3*/{15, &MINI_BASIC::B1d, -1},//FOR
+      /**4*/{18, &MINI_BASIC::F1b, -1},//FOR
+      /**5*/{15, &MINI_BASIC::B1d, -1},//GOTO, GOSUB
+      /**6*/{20, &MINI_BASIC::B1d,  8},//GOTO 
+      /**7*/{15, &MINI_BASIC::E1a, -1},//GOSUB
+      /**8*/{19, &MINI_BASIC::B1d, -1},//GOSUB
+      /**9*/{21, &MINI_BASIC::B1d, -1},//GOSUB
+      /*10*/{2,  &MINI_BASIC::E1b, -1},//GOSUB
+      /*11*/{6,  &MINI_BASIC::A2r, -1},//IF
+      /*12*/{5,  &MINI_BASIC::B1d, -1},//LET
+      /*13*/{20, &MINI_BASIC::F1a, -1},//LET
+      /*14*/{5,  &MINI_BASIC::B1d, -1},//NEXT
+      /*15*/{24, &MINI_BASIC::B1d, -1},//NEXT
+      /*16*/{20, &MINI_BASIC::C1a, -1},//NEXT
+      /*17*/{5,  &MINI_BASIC::B1d, -1},//RETURN, REM
+      /*18*/{20, &MINI_BASIC::B1d, 22},//RETURN
+      /*19*/{21, &MINI_BASIC::B1d, -1},//RETURN
+      /*20*/{18, &MINI_BASIC::B1d, -1},//RETURN
+      /*21*/{14, &MINI_BASIC::A2s, -1},//RETURN
+      /*22*/{13, &MINI_BASIC::G1a, -1},//REM
+      /*23*/{20, &MINI_BASIC::B1d, -1},//STEP
+      /*24*/{5,  &MINI_BASIC::B1d, -1},//STEP
+      /*25*/{16, &MINI_BASIC::A2t, -1},//STEP
+      /*26*/{15, &MINI_BASIC::A2u, -1},//TO
    };
-
-  
 
 
 public:
 
    MINI_BASIC(string name_file);
+
+   void Print_table_token();
 
 };
 

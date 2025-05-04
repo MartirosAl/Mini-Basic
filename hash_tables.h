@@ -5,35 +5,9 @@
 using namespace std;
 
 // mod 100
-int standart(int a)
+static int standart(int a)
 {
    return a % 100;
-}
-
-// Функция для определения ближайшего простого числа, не меньшего заданного
-bool isPrime(size_t n) {
-   if (n < 2) return false;
-   if (n < 4) return true;
-   if (n % 2 == 0 || n % 3 == 0) return false;
-   for (size_t i = 5; i * i <= n; i += 6) {
-      if (n % i == 0 || n % (i + 2) == 0) return false;
-   }
-   return true;
-}
-
-size_t nextPrime(size_t n) {
-   while (!isPrime(n)) {
-      ++n;
-   }
-   return n;
-}
-
-// Функция определения размера хеш-таблицы
-size_t determineHashTableSize(size_t numElements, double loadFactor = 0.75) {
-   if (numElements == 0) return 0;
-
-   size_t estimatedSize = static_cast<size_t>(std::ceil(numElements / loadFactor));
-   return nextPrime(estimatedSize);
 }
 
 struct Element_hash_table
@@ -53,7 +27,8 @@ class Hash_table_internal
 {
    Element_hash_table* table;
 
-   int(*function)(int);
+   typedef int(*func)(int);
+   func function;
    
    //Размер всей таблицы
    size_t size_table;
@@ -219,13 +194,13 @@ class Hash_table_internal
 
 public:
 
-   //По умолчанию функция mod 269, st = 1361
+   //По умолчанию функция mod 100, st = 300
    Hash_table_internal()
    {
-      function = standart;
-      size_table = 1361;
-      size_main_area = 269 + 1;
-      next_in_alt_table = 269 + 2;
+      function = &standart;
+      size_table = 300;
+      size_main_area = 100 + 1;
+      next_in_alt_table = 100 + 2;
 
       Create_table();
    }
@@ -284,11 +259,34 @@ public:
     
    }
 
+   int& operator[](size_t index_) const
+   {
+      if (index_ >= size_table)
+      {
+         cout << "Error hash";
+      }
+      return table[index_].value;
+   }
+
+   int& operator[](size_t index_)
+   {
+      if (index_ >= size_table)
+      {
+         cout << "Error hash";
+      }
+
+      if (index_ >= size_table)
+      {
+         Expansion();
+      }
+      return table[index_].value;
+   }
+
    int find(int a)
    {
        if (table[function(a) + 1].value == a)
        {
-           return function(a) + 1;
+           return function(a);
        }
        else
        {
@@ -397,5 +395,32 @@ public:
          cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << endl;
       }
    }
+
+   // Функция для определения ближайшего простого числа, не меньшего заданного
+   bool isPrime(size_t n) {
+      if (n < 2) return false;
+      if (n < 4) return true;
+      if (n % 2 == 0 || n % 3 == 0) return false;
+      for (size_t i = 5; i * i <= n; i += 6) {
+         if (n % i == 0 || n % (i + 2) == 0) return false;
+      }
+      return true;
+   }
+
+   size_t nextPrime(size_t n) {
+      while (!isPrime(n)) {
+         ++n;
+      }
+      return n;
+   }
+
+   // Функция определения размера хеш-таблицы
+   size_t determineHashTableSize(size_t numElements, double loadFactor = 0.75) {
+      if (numElements == 0) return 0;
+
+      size_t estimatedSize = static_cast<size_t>(std::ceil(numElements / loadFactor));
+      return nextPrime(estimatedSize);
+   }
+
 };
 

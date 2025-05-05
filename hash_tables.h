@@ -241,9 +241,9 @@ public:
 
    int insert_index(int a, int ind)
    {
-      table[function(a) + 1].index = ind;
+      table[a].index = ind;
 
-      return (function(a) + 1);
+      return a;
    }
 
    void remove(int a)
@@ -323,16 +323,16 @@ public:
       {
          if (table[i].value == -1 && table[i].alt == 0)
             continue;
-         cout << "--------------------------------" << endl;
-         cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << endl;
+         cout << "--------------------------" << endl;
+         cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << "\t | " << endl;
       }
-      cout << "===================================" << endl;
+      cout << "==========================" << endl;
       for (int i = size_main_area; i < size_table; i++)
       {
          if (table[i].value == -1 && table[i].alt == 0)
             continue;
-         cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << endl;
-         cout << "--------------------------------" << endl;
+         cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << "\t | " << endl;
+         cout << "--------------------------" << endl;
       }
    }
 
@@ -343,12 +343,12 @@ public:
       for (int i = 0; i < size_main_area; i++)
       {
          cout << "--------------------------------" << endl;
-         cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << endl;
+         cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << "\t | " << endl;
       }
       cout << "===================================" << endl;
       for (int i = size_main_area; i < a; i++)
       {
-         cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << endl;
+         cout << i << "\t | " << table[i].value << "\t | " << table[i].alt << "\t | " << endl;
          cout << "--------------------------------" << endl;
       }
    }

@@ -112,7 +112,7 @@ MINI_BASIC::MINI_BASIC(string name_file)
 
 
     //Tests flags
-    bool flag_work_state = true;
+    bool flag_work_state = false;
 
     //Initial state
     q = &MINI_BASIC::A1;
@@ -146,6 +146,7 @@ void MINI_BASIC::Print_table_tokens()
 {
    for (int i = 0; i < table_tokens.size(); i++)
    {
+      cout << "---------------------------------------" << endl;
       cout << TokenTypeString[table_tokens[i].type] << " ";
       switch (table_tokens[i].type)
       {
@@ -156,20 +157,20 @@ void MINI_BASIC::Print_table_tokens()
 
       case OPERAND:
          if (table_tokens[i].value <= 286)
-            cout << table_tokens[i].value;
+            cout << (char)((table_tokens[i].value % 26) + 'A' - 1) << (((table_tokens[i].value / 26) == 0) ? ' ' : (char)(table_tokens[i].value / 26 + '0' - 1));
          else
             cout << table_operands[table_tokens[i].value];
          break;
 
       case GOTO:
       case GOSUB:
-         cout << table_number_string.find(table_tokens[i].value);
+         cout << table_number_string[table_tokens[i].value];
          break;
 
       case LET:
       case FOR:
       case NEXT:
-         cout << table_operands[table_tokens[i].value];
+         cout << table_tokens[i].value;
          break;
 
       case RELATIONSHIP_OPERATIONS:
@@ -235,19 +236,20 @@ void MINI_BASIC::Print_table_tokens()
       }
       cout << endl;
    }
+   cout << "---------------------------------------" << endl;
 }
 
 void MINI_BASIC::Print_table_operands()
 {
+   cout << "--------------------------" << endl;
    for (int i = 0; i < table_operands.size(); i++)
    {
       if (i <= 286 && table_operands[i] != 0)
-      {
-         cout << table_operands[i] << endl;
-      }
-      //else
-      //   cout << table_operands[i] << endl;
+         cout << i << "\t | " << (char)((i % 26) + 'A' - 1) << (((i / 26) == 0)? ' ' : (char)(i/26 + '0' - 1)) << "\t\t | " << endl;
+      else if (i > 286)
+         cout << i << "\t | " << table_operands[i] << "\t\t | " << endl;
    }
+   cout << "--------------------------" << endl;
 }
 
 void MINI_BASIC::Print_table_labels()
@@ -1338,7 +1340,7 @@ void MINI_BASIC::E2c()
 
 void MINI_BASIC::F1a()
 {
-   lex_class_reg = FOR;
+   lex_class_reg = LET;
    next();
    q = &MINI_BASIC::F1;
 }
@@ -1359,7 +1361,7 @@ void MINI_BASIC::F2a()
 
 void MINI_BASIC::F3a()
 {
-   index_reg = (character.value + 1) * 26;
+   index_reg += (character.value + 1) * 26;
    next();
    q = &MINI_BASIC::F3;
 }
@@ -1534,12 +1536,14 @@ void MINI_BASIC::Create_Token()
    case LET:
    case FOR:
    case NEXT:
-      T.value = ptr_to_free;
+      table_operands[index_reg] = 1;
+      T.value = index_reg;
       break;
 
    case RELATIONSHIP_OPERATIONS:
       T.value = relation_value_reg;
       break;
+
    case ARITHMETIC_OPERATIONS:
    case L_BRACKET:
    case R_BRACKET:

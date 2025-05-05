@@ -112,7 +112,7 @@ MINI_BASIC::MINI_BASIC(string name_file)
 
 
     //Tests flags
-    bool flag_work_state = false;
+    bool flag_work_state = true;
 
     //Initial state
     q = &MINI_BASIC::A1;
@@ -134,7 +134,7 @@ MINI_BASIC::MINI_BASIC(string name_file)
 
         if (q == &MINI_BASIC::EXIT1 || q == &MINI_BASIC::EXIT2 || q == &MINI_BASIC::EXIT3 || q == &MINI_BASIC::EXIT4 || q == &MINI_BASIC::EXIT5 || q == &MINI_BASIC::EXIT6)
         {
-           cout << "Code 0";
+           cout << "Code 0" << endl;
            return;
         }
 
@@ -142,7 +142,7 @@ MINI_BASIC::MINI_BASIC(string name_file)
 
 }
 
-void MINI_BASIC::Print_table_token()
+void MINI_BASIC::Print_table_tokens()
 {
    for (int i = 0; i < table_tokens.size(); i++)
    {
@@ -235,6 +235,24 @@ void MINI_BASIC::Print_table_token()
       }
       cout << endl;
    }
+}
+
+void MINI_BASIC::Print_table_operands()
+{
+   for (int i = 0; i < table_operands.size(); i++)
+   {
+      if (i <= 286 && table_operands[i] != 0)
+      {
+         cout << table_operands[i] << endl;
+      }
+      //else
+      //   cout << table_operands[i] << endl;
+   }
+}
+
+void MINI_BASIC::Print_table_labels()
+{
+   table_number_string.Print();
 }
 
 //начало строки
@@ -653,6 +671,7 @@ void MINI_BASIC::E2()
       break;
    case END_OF_FILE_S:
       EXIT6();
+      break;
    default:
       Error();
       break;
@@ -828,7 +847,7 @@ void MINI_BASIC::DA2D()
        reverse(temp.begin(), temp.end());
 
 
-       number_reg /= pow(10, (to_string(number_reg).length() - counter_reg));
+       number_reg /= pow(10, counter_reg);
 
        temp.resize(counter_reg);
        reverse(temp.begin(), temp.end());
@@ -1445,36 +1464,42 @@ void MINI_BASIC::EXIT1()
 {
    lex_class_reg = END;
    Create_Token();
+   q = &MINI_BASIC::EXIT1;
 }
 
 void MINI_BASIC::EXIT2()
 {
    Create_Token();
    EXIT1();
+   q = &MINI_BASIC::EXIT2;
 }
 
 void MINI_BASIC::EXIT3()
 {
    DA1D();
    EXIT2();
+   q = &MINI_BASIC::EXIT3;
 }
 
 void MINI_BASIC::EXIT4()
 {
    DA2D();
    EXIT2();
+   q = &MINI_BASIC::EXIT4;
 }
 
 void MINI_BASIC::EXIT5()
 {
    DA3D();
    EXIT2();
+   q = &MINI_BASIC::EXIT5;
 }
 
 void MINI_BASIC::EXIT6()
 {
    DA1E();
    EXIT2();
+   q = &MINI_BASIC::EXIT6;
 }
 
 void MINI_BASIC::Create_Token()
@@ -1486,6 +1511,7 @@ void MINI_BASIC::Create_Token()
    switch (lex_class_reg)
    {
    case LABLE:
+      table_number_string.insert_index(index_cur_number, counter_tokens);
       T.value = index_cur_number;
       break;
 
@@ -1541,6 +1567,7 @@ void MINI_BASIC::Error_Handler()
 
 void MINI_BASIC::Error()
 {
+   cout << "JOPA" << endl;
    q = &MINI_BASIC::Error;
 }
 

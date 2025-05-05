@@ -286,7 +286,7 @@ public:
    {
        if (table[function(a) + 1].value == a)
        {
-           return function(a);
+           return function(a) + 1;
        }
        else
        {

@@ -17,7 +17,7 @@ class MINI_BASIC
    //RSTR
    int number_string_reg = 0;
    //RCH
-   double number_reg = 0; 
+   long long number_reg = 0; 
    //RZ
    int order_sign_reg = 0;       
    //RP
@@ -308,7 +308,11 @@ public:
 
    MINI_BASIC(string name_file);
 
-   void Print_table_token();
+   void Print_table_tokens();
+
+   void Print_table_operands();
+
+   void Print_table_labels();
 
 };
 

@@ -1,9 +1,11 @@
 
-#include "MINI_BASIC.h"
+#include "MB Lexical analyzer.h"
+#include "MB Lexical analyzer.h"
 using namespace std;
 int main()
 { 
-   MINI_BASIC A("Test1.txt");
+   MINI_BASIC_Lexical_analyzer A;
+   A.start("Test1.txt");
    A.Print_table_tokens();
    A.Print_table_operands();
    A.Print_table_labels();

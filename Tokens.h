@@ -6,8 +6,8 @@ using namespace std;
 
 enum TokenType
 {
-   start = -1, LABLE, OPERAND, ARITHMETIC_OPERATIONS, RELATIONSHIP_OPERATIONS, 
-   NEXT, LET, FOR, GOTO, GOSUB, L_BRACKET, R_BRACKET, IF, RETURN, END, TO, STEP, REM, ERROR, END_OF_FILE, COMMENT
+   start_T = -1, LABLE_T, OPERAND_T, ARITHMETIC_OPERATIONS_T, RELATIONSHIP_OPERATIONS_T, 
+   NEXT_T, LET_T, FOR_T, GOTO_T, GOSUB_T, L_BRACKET_T, R_BRACKET_T, IF_T, RETURN_T, END_T, TO_T, STEP_T, REM_T, ERROR_T, END_OF_FILE_T, COMMENT_T
 };
 
 const vector<string> TokenTypeString
@@ -27,29 +27,29 @@ enum Relationship_operations
 
 const map<string, TokenType> table_detection
 {
-   {"NEXT", NEXT}, {"LET", LET}, {"FOR", FOR}, {"GOTO", GOTO}, {"GOSUB", GOSUB}, 
-   {"IF", IF}, {"RETURN", RETURN}, {"END", END}, {"TO", TO}, {"STEP", STEP}, {"REM", REM}
+   {"NEXT", NEXT_T}, {"LET", LET_T}, {"FOR", FOR_T}, {"GOTO", GOTO_T}, {"GOSUB", GOSUB_T}, 
+   {"IF", IF_T}, {"RETURN", RETURN_T}, {"END", END_T}, {"TO", TO_T}, {"STEP", STEP_T}, {"REM", REM_T}
 };
 
 struct Token
 {
-   TokenType type = start;
+   TokenType type = start_T;
    int value;
 };
 
 enum SymbolicTokenType
 {
    start_S = -1,
-   LETTER,
-   DIGIT,
+   LETTER_S,
+   DIGIT_S,
    ARITHMETIC_OPERATION_S,
    RELATION_S,
-   SPACE,
-   LF,
+   SPACE_S,
+   LF_S,
    ERROR_S,
    O_BRACE_S,
    C_BRACE_S,
-   DOT,
+   DOT_S,
    END_OF_FILE_S
 };
 

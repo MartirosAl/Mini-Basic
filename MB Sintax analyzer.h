@@ -11,66 +11,44 @@ protected:
    typedef void(MINI_BASIC_Syntax_analyzer::* func) ();
    func Control_Table[33][23];
 
+   stack<int> stk;
+
+   int in;
+
    void Create_Big_Table();
 
    MINI_BASIC_Syntax_analyzer();
-   
-   void Rule1();
-   void Rule2();
-   void Rule3();
-   void Rule4();
-   void Rule5();
-   void Rule6();
-   void Rule7();
-   void Rule8();
-   void Rule9();
-   void Rule10();
-   void Rule11();
-   void Rule12();
-   void Rule13();
-   void Rule14();
-   void Rule15();
-   void Rule16();
-   void Rule17();
-   void Rule18();
-   void Rule19();
-   void Rule20();
-   void Rule21();
-   void Rule22();
-   void Rule23();
-   void Rule24();
-   void Rule25();
-   void Rule26();
-   void Rule27();
 
-   void Process1();
-   void Process2();
-   void Process3();
-   void Process4();
-   void Process5();
-   void Process6();
-   void Process7();
-   void Process8();
-   void Process9();
-   void Process10();
-   void Process11();
-   void Process12();
-   void Process13();
-   void Process14();
-   void Process15();
-   void Process16();
-   void Process17();
-   void Process18();
-   void Process19();
-   void Process20();
-   void Process21();
-   void Process22();
-   void Process23();
-   void Process24();
-   void Process25();
-   void Process26();
-   void Process27();
-   void Process28();
+   void Create_Atom();
+   
+   void F1();
+   void F2();
+   void F3();
+   void F4();
+   void F5();
+   void F6();
+   void F7();
+   void F8();
+   void F9();
+   void F10();
+   void F11();
+   void F12();
+   void F13();
+   void F14();
+   void F15();
+   void F16();
+   void F17();
+   void F18();
+   void F19();
+   void F20();
+   void F21();
+   void F22();
+   void F23();
+   void F24();
+   void F25();
+   void F26();
+   void F27();
+   void F28();
 
    void a();
    void b();
@@ -89,6 +67,7 @@ protected:
    void o();
    void p();
    void q();
+   void r();
 
    void A();
 

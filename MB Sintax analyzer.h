@@ -11,15 +11,26 @@ protected:
    typedef void(MINI_BASIC_Syntax_analyzer::* func) ();
    func Control_Table[33][23];
 
-   stack<int> stk;
+   stack <int> stk;
+   int in; //Указатель на вход
+   int mch; //Механизм свекров
+   int num_str; //Номер текущей строки
+   int TM[512]; //Таблица меток
+   int NTM; //Указатель на первый свободный элемент таблицы меток
+   void printTA();
+   void showStk();
 
-   int in;
+public:
+   int TX[512]; //Таблица для хранения результатов атома хранения
+   int NTX; //Указатель на первый свободный элемент таблицы результатов атома хранения
+   bool flagErr; //Вид обнаружения ошибки
+   int NTtemp; //Указатель на первый свободный элемент в таблицы промежуточных результатов
 
    void Create_Big_Table();
 
    MINI_BASIC_Syntax_analyzer();
 
-   void Create_Atom();
+   void Create_Atom(int index, int a = -1, int b = -1, int c = -1, int d = -1);
    
    void F1();
    void F2();

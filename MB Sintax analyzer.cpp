@@ -1,5 +1,4 @@
 #include "MB Sintax analyzer.h"
-#include <stack>
 
 MINI_BASIC_Syntax_analyzer::MINI_BASIC_Syntax_analyzer()
 {
@@ -14,10 +13,111 @@ MINI_BASIC_Syntax_analyzer::MINI_BASIC_Syntax_analyzer()
 
 }
 
-void MINI_BASIC_Syntax_analyzer::Create_Atom(int index, int a, int b, int c, int d)
+void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
 {
+   start_LA(name_file);
 
+   NTtemp = ptr_to_free;
+   NTX = 700;
+   NTM = 256;
+
+   for (int i = 1; i < table_tokens.size(); i++)
+   {
+      if (table_tokens[i].type == (TokenType)17)
+         table_tokens[i].type = (TokenType)22;
+      if (table_tokens[i].type == (TokenType)18)
+         table_tokens[i].type = (TokenType)23;
+      if (table_tokens[i].type == (TokenType)19)
+         table_tokens[i].type = (TokenType)((TokenType)16 + table_tokens[i].type);
+   }
+
+   int temp_par = -1;
+   
+   while (in < table_tokens.size())
+   {
+      temp_par = stk.top();
+      if (temp_par >= 19 && temp_par <= 33)
+         (this->*Control_Table[temp_par][1])();
+      else
+         (this->*Control_Table[temp_par][table_tokens[in].type])();
+   }
+
+   PrintTA();
 }
+
+void MINI_BASIC_Syntax_analyzer::Create_Atom(int type, int a, int b, int c, int d)
+{
+   table_atoms[NTA].type = (AtomType)type;
+   table_atoms[NTA].attribute1 = a;
+   table_atoms[NTA].attribute2 = b;
+   table_atoms[NTA].attribute3 = c;
+   table_atoms[NTA].attribute4 = d;
+   NTA++;
+}
+
+void MINI_BASIC_Syntax_analyzer::PrintTA()
+{
+   for (int i = 0; i < table_atoms.size(); i++)
+   {
+      cout << table_atoms[i].type;
+      if (table_atoms[i].attribute1)
+         cout << " " << table_atoms[i].attribute1;
+      if (table_atoms[i].attribute2)
+         cout << " " << table_atoms[i].attribute2;
+      if (table_atoms[i].attribute3)
+         cout << " " << table_atoms[i].attribute3;
+      if (table_atoms[i].attribute4)
+         cout << " " << table_atoms[i].attribute4;
+   }
+}
+
+void MINI_BASIC_Syntax_analyzer::PrintStk()
+{
+   stack<int> temp;
+   for (int i = 0; i < stk.size();)
+   {
+      cout << stk.top();
+      temp.push(stk.top());
+      stk.pop();
+   }
+   for (int i = 0; i < temp.size();)
+   {
+      stk.push(temp.top());
+      temp.pop();
+   }
+}
+
+void MINI_BASIC_Syntax_analyzer::Error(string errMsg)
+{
+   ofstream
+      ferr("errors.txt");
+   ferr << "Oшибка: Cтpoka" << num_str << ' ' << errMsg;
+   flagErr = true;
+   if (table_tokens[in].type == 23)
+   {
+      in++;
+   }
+   else
+   {
+      while (table_tokens[in].type != 1)
+         in++;
+   }
+
+   if (stk.top() == 1 || stk.top() == 2 || stk.top() == 4) return;
+   else
+      if (stk.top() == 16 || stk.top() == 18)
+      {
+         stk.pop(); stk.push(2);
+      }
+      else
+      {
+         while (stk.top() != 4)
+            stk.pop();
+      }
+
+   ferr.close();
+}
+
 
 void MINI_BASIC_Syntax_analyzer::a()
 {
@@ -121,7 +221,7 @@ void MINI_BASIC_Syntax_analyzer::i()
    stk.pop();
    if (k1 != k2)
    {
-      Error("Переменная в next операторе отлична от переменной for оператора");
+      Error("The variable in the 'next' statement is different from the variable in the 'for' statement");
    }
    stk.pop();
 }
@@ -240,7 +340,7 @@ void MINI_BASIC_Syntax_analyzer::F1()
    stk.push(16);
    stk.push(2);
    Create_Atom(2, table_tokens[in].value);
-   in = table_number_string.Get_NTS(table_tokens[in].value);
+   in = table_number_string[table_tokens[in].value];
    in++;
 
 }
@@ -366,16 +466,421 @@ void MINI_BASIC_Syntax_analyzer::F10()
    stk.push(5);
    in++;
 }
-
-
-void MINI_BASIC_Syntax_analyzer::printTA()
+void MINI_BASIC_Syntax_analyzer::F11()
 {
-
+   table_operands[ptr_to_free] = 1;
+   stk.pop();
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   stk.pop();
+   stk.push(table_operands[ptr_to_free]);
+   stk.push(p);
+}
+void MINI_BASIC_Syntax_analyzer::F12()
+{
+   stk.pop();
+   stk.push(4);
+   in++;
 }
 
-void MINI_BASIC_Syntax_analyzer::showStk()
+
+void MINI_BASIC_Syntax_analyzer::F13()
 {
+   stk.pop();
+   stk.push(2);
+   Create_Atom(2, table_tokens[in].value);
+   num_str = (table_tokens[in].value);
+   in++;
 }
+void MINI_BASIC_Syntax_analyzer::F14()
+{
+   stk.pop();
+   stk.push(0);
+   stk.push(9);
+   stk.push(2);
+   stk.push(6);
+}
+void MINI_BASIC_Syntax_analyzer::F15()
+{
+   stk.pop();
+   stk.push(NTtemp);
+   stk.push(9);
+   stk.push(NTtemp);
+   stk.push(0);
+   stk.push(32);
+   stk.push(2);
+   stk.push(6);
+   NTtemp++;
+   in++;
+}
+
+
+void MINI_BASIC_Syntax_analyzer::F16()
+{
+   stk.pop();
+   stk.push(NTtemp);
+   stk.push(9);
+   stk.push(NTtemp);
+   stk.push(0);
+   stk.push(33);
+   stk.push(2);
+   stk.push(6);
+   NTtemp++;
+   in++;
+}
+void MINI_BASIC_Syntax_analyzer::F17()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   stk.push(NTtemp);
+   stk.push(9);
+   stk.push(NTtemp);
+   stk.push(0);
+   stk.push(p);
+   stk.push(27);
+   stk.push(3);
+   stk.push(6);
+   NTtemp++;
+   in++;
+}
+
+void MINI_BASIC_Syntax_analyzer::F18()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   stk.push(NTtemp);
+   stk.push(9);
+   stk.push(NTtemp);
+   stk.push(0);
+   stk.push(p);
+   stk.push(28);
+   stk.push(3);
+   stk.push(6);
+   NTtemp++;
+   in++;
+}
+
+void MINI_BASIC_Syntax_analyzer::F19()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   int i = stk.top() - 1;
+   stk.pop();
+   stack<int> tmp;
+   while (i > 0)
+   {
+      tmp.push(stk.top());
+      stk.pop();
+      i--;
+   }
+
+   while (stk.top() != 0)
+   {
+      tmp.push(stk.top());
+      stk.pop();
+   }
+   stk.pop();
+   stk.push(p);
+   while (!tmp.empty())
+   {
+      stk.push(tmp.top());
+      tmp.pop();
+   }
+}
+
+
+void MINI_BASIC_Syntax_analyzer::F20()
+{
+   stk.pop();
+   stk.push(0);
+   stk.push(10);
+   stk.push(2);
+   stk.push(7);
+}
+void MINI_BASIC_Syntax_analyzer::F21()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   stk.push(NTtemp);
+   stk.push(10);
+   stk.push(NTtemp);
+   stk.push(0);
+   stk.push(p);
+   stk.push(29);
+   stk.push(3);
+   stk.push(7);
+   NTtemp++;
+   in++;
+}
+
+
+void MINI_BASIC_Syntax_analyzer::F22()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   stk.push(NTtemp);
+   stk.push(10);
+   stk.push(NTtemp);
+   stk.push(0);
+   stk.push(p);
+   stk.push(30);
+   stk.push(3);
+   stk.push(7);
+   NTtemp++;
+   in++;
+}
+
+void MINI_BASIC_Syntax_analyzer::F23()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   int i = stk.top() - 1;
+   stk.pop();
+   stack<int> tmp;
+   while (i != 0)
+   {
+      tmp.push(stk.top());
+      stk.pop();
+      i--;
+   }
+   while (stk.top() != 0)
+   {
+      tmp.push(stk.top());
+      stk.pop();
+   }
+   stk.pop();
+   stk.push(p);
+   while (!tmp.empty())
+   {
+      stk.push(tmp.top());
+      tmp.pop();
+   }
+}
+
+void MINI_BASIC_Syntax_analyzer::F24()
+{
+   stk.pop();
+   stk.push(0);
+   stk.push(11);
+   stk.push(2);
+   stk.push(8);
+}
+
+void MINI_BASIC_Syntax_analyzer::F25()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   int t = stk.top();
+   stk.push(NTtemp);
+   stk.push(11);
+   stk.push(NTtemp);
+   stk.push(0);
+   stk.push(p);
+   stk.push(31);
+   stk.push(3);
+   stk.push(8);
+   NTtemp++;
+   in++;
+}
+
+void MINI_BASIC_Syntax_analyzer::F26()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   int i = stk.top() - 1;
+   stk.pop();
+   stack<int> tmp;
+   while (i > 0)
+   {
+      tmp.push(stk.top());
+      stk.pop();
+      i--;
+   }
+
+   while (stk.top() != 0)
+   {
+      tmp.push(stk.top());
+      stk.pop();
+   }
+   stk.pop();
+   stk.push(p);
+   while (!tmp.empty())
+   {
+      stk.push(tmp.top());
+      tmp.pop();
+   }
+}
+
+void MINI_BASIC_Syntax_analyzer::F27()
+{
+   stk.pop();
+   int p = stk.top();
+   stk.pop();
+   stk.push(15);
+   stk.push(p);
+   stk.push(5);
+   in++;
+}
+
+void MINI_BASIC_Syntax_analyzer::F28()
+{
+   stk.pop();
+   int i = stk.top() - 1;
+   stk.pop();
+   stack<int> tmp;
+   while (i > 0)
+   {
+      tmp.push(stk.top());
+      stk.pop();
+      i--;
+   }
+   while (stk.top() != 0)
+   {
+      tmp.push(stk.top());
+      stk.pop();
+   }
+   stk.pop();
+   stk.push(table_tokens[in].value);
+   while (!tmp.empty())
+   {
+      stk.push(tmp.top());
+      tmp.pop();
+   }
+   in++;
+}
+
+// Процедуры перехода на обработку ошибки
+void MINI_BASIC_Syntax_analyzer::A()
+{
+   Error("Программа начинается неверно.");
+}
+void MINI_BASIC_Syntax_analyzer::B() {
+   Error("Оператор начинается неверно.");
+}
+void MINI_BASIC_Syntax_analyzer::G1() {
+   Error("Неожиданный вход после for-оператора.");
+}
+void MINI_BASIC_Syntax_analyzer::G2() {
+   Error("Лишняя правая скобка в выражении после table_operands.");
+}
+void MINI_BASIC_Syntax_analyzer::C() {
+   Error(" ");
+}
+void MINI_BASIC_Syntax_analyzer::D() {
+   Error("Неожиданный вход после оператора.");
+}
+void MINI_BASIC_Syntax_analyzer::K1() {
+   Error("Выражение незаконно - нет операнда.");
+}
+void MINI_BASIC_Syntax_analyzer::K2() {
+   Error("Оператор незакончен.");
+}
+void MINI_BASIC_Syntax_analyzer::K3() {
+   Error("В выражении пропущен операнд.");
+}
+void MINI_BASIC_Syntax_analyzer::K4() {
+   Error("Неожиданный вход после выражения.");
+}
+void MINI_BASIC_Syntax_analyzer::K5() {
+   Error("Выражение начинается с недопустимого символа.");
+}
+void MINI_BASIC_Syntax_analyzer::K6()
+{
+   Error("Два знака операции в выражении.");
+}
+
+void MINI_BASIC_Syntax_analyzer::K7() {
+   Error("В выражении пропущен знак операции.");
+}
+
+void MINI_BASIC_Syntax_analyzer::E1() {
+   Error("Неожиданный вход в if-операторе.");
+}
+
+void MINI_BASIC_Syntax_analyzer::E2() {
+   Error("If-оператор незакончен.");
+}
+
+void MINI_BASIC_Syntax_analyzer::E3() {
+   Error("Лишняя правая скобка в выражении после И.");
+}
+
+void MINI_BASIC_Syntax_analyzer::L() {
+   Error("for-операторы вложены неверно. Пропущено next");
+}
+
+void MINI_BASIC_Syntax_analyzer::M1() {
+   Error("Неожиданный вход в if-операторе.");
+}
+
+void MINI_BASIC_Syntax_analyzer::M2() {
+   Error("If-оператор незакончен.");
+}
+
+void MINI_BASIC_Syntax_analyzer::M3() {
+   Error("Два знака отношения в if-операторе.");
+}
+
+void MINI_BASIC_Syntax_analyzer::M4() {
+   Error("Лишняя правая скобка в выражении после знака отношения.");
+}
+
+void MINI_BASIC_Syntax_analyzer::N1() {
+   Error("Пропущена правая скобка перед вход.");
+}
+
+void MINI_BASIC_Syntax_analyzer::N2() {
+   Error("Пропущена правая скобка в конце строки.");
+}
+
+void MINI_BASIC_Syntax_analyzer::K() {
+   Error("for-операторы вложены неверно - лишнее next.");
+}
+
+void MINI_BASIC_Syntax_analyzer::P1() {
+   Error("Неожиданный вход в for-операторе.");
+}
+
+void MINI_BASIC_Syntax_analyzer::P2() {
+   Error("for-оператор незакончен.");
+}
+
+void MINI_BASIC_Syntax_analyzer::P3() {
+   Error("Лишняя правая скобка в выражении после to.");
+}
+
+void MINI_BASIC_Syntax_analyzer::P4() {
+   Error("to пропущено или не на своём месте в for-операторе.");
+}
+
+void MINI_BASIC_Syntax_analyzer::P() {
+   Error("Программа продолжается после end-оператора.");
+}
+void MINI_BASIC_Syntax_analyzer::T1() {
+   Error("Нет программы.");
+}
+
+void MINI_BASIC_Syntax_analyzer::T2() {
+   Error("Пропущен end-оператор.");
+}
+
+void MINI_BASIC_Syntax_analyzer::T3() {
+   Error("Программа кончается посреди оператора.");
+}
+
+void MINI_BASIC_Syntax_analyzer::O() {
+   Error("Ошибка компилятора.");
+}
+
 
 void MINI_BASIC_Syntax_analyzer::Create_Big_Table()
 {
@@ -604,7 +1109,7 @@ void MINI_BASIC_Syntax_analyzer::Create_Big_Table()
    Control_Table[8][21] = &MINI_BASIC_Syntax_analyzer::O;
    Control_Table[8][22] = &MINI_BASIC_Syntax_analyzer::O;
 
-   //<T-список>
+   //<Control_Table-список>
    Control_Table[9][0] = &MINI_BASIC_Syntax_analyzer::F23;
    Control_Table[9][1] = &MINI_BASIC_Syntax_analyzer::K7;
    Control_Table[9][2] = &MINI_BASIC_Syntax_analyzer::F23;

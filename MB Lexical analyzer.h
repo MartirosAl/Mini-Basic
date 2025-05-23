@@ -311,7 +311,7 @@ public:
 
    MINI_BASIC_Lexical_analyzer();
 
-   void start(string name_file);
+   void start_LA(string name_file);
 
    void Print_table_tokens();
 

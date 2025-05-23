@@ -1,9 +1,20 @@
 #pragma once
+#include <stack>
 #include "MB Lexical analyzer.h"
 #include "Atoms.h"
+
 class MINI_BASIC_Syntax_analyzer :
     protected MINI_BASIC_Lexical_analyzer
 {
+public:
+
+   void PrintTA();
+   void PrintStk();
+
+   MINI_BASIC_Syntax_analyzer();
+
+   void start_SA(string name_file);
+
 protected:
 
    vector<Atom> table_atoms;
@@ -15,22 +26,21 @@ protected:
    int in; //Указатель на вход
    int mch; //Механизм свекров
    int num_str; //Номер текущей строки
-   int TM[512]; //Таблица меток
+   vector<int> TM; //Таблица меток
    int NTM; //Указатель на первый свободный элемент таблицы меток
-   void printTA();
-   void showStk();
 
-public:
-   int TX[512]; //Таблица для хранения результатов атома хранения
+   vector<int> TX; //Таблица для хранения результатов атома хранения
    int NTX; //Указатель на первый свободный элемент таблицы результатов атома хранения
    bool flagErr; //Вид обнаружения ошибки
    int NTtemp; //Указатель на первый свободный элемент в таблицы промежуточных результатов
+   int NTA; //Указатель на первый свободный элемент таблицы атомов
+
 
    void Create_Big_Table();
 
-   MINI_BASIC_Syntax_analyzer();
+   void Create_Atom(int type, int a = -1, int b = -1, int c = -1, int d = -1);
 
-   void Create_Atom(int index, int a = -1, int b = -1, int c = -1, int d = -1);
+   void Error(string errMsg);
    
    void F1();
    void F2();

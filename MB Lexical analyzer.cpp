@@ -118,7 +118,7 @@ MINI_BASIC_Lexical_analyzer::MINI_BASIC_Lexical_analyzer()
 
 }
 
-void MINI_BASIC_Lexical_analyzer::start(string name_file)
+void MINI_BASIC_Lexical_analyzer::start_LA(string name_file)
 {
    stream.open(name_file);
    if (!stream)

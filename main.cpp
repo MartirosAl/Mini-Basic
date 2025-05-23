@@ -1,6 +1,5 @@
 
 #include "MB Lexical analyzer.h"
-#include "MB Lexical analyzer.h"
 using namespace std;
 int main()
 { 

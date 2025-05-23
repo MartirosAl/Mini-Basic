@@ -33,7 +33,7 @@ const map<string, TokenType> table_detection
 
 struct Token
 {
-   TokenType type = start_T;
+   int type = start_T;
    int value;
 };
 

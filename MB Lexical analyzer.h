@@ -283,8 +283,8 @@ protected:
       /**3*/{15, &MINI_BASIC_Lexical_analyzer::B1d, -1},//FOR
       /**4*/{18, &MINI_BASIC_Lexical_analyzer::F1b, -1},//FOR
       /**5*/{15, &MINI_BASIC_Lexical_analyzer::B1d, -1},//GOTO, GOSUB
-      /**6*/{20, &MINI_BASIC_Lexical_analyzer::B1d,  8},//GOTO 
-      /**7*/{15, &MINI_BASIC_Lexical_analyzer::E1a, -1},//GOSUB
+      /**6*/{20, &MINI_BASIC_Lexical_analyzer::B1d,  8},//GOTO, GOSUB
+      /**7*/{15, &MINI_BASIC_Lexical_analyzer::E1a, -1},//GOTO
       /**8*/{19, &MINI_BASIC_Lexical_analyzer::B1d, -1},//GOSUB
       /**9*/{21, &MINI_BASIC_Lexical_analyzer::B1d, -1},//GOSUB
       /*10*/{2,  &MINI_BASIC_Lexical_analyzer::E1b, -1},//GOSUB

@@ -11,6 +11,11 @@ SymbolicToken MINI_BASIC_Lexical_analyzer::Transliterator(int character)
         result.token_class = SymbolicTokenType::LETTER_S;
         result.value = character - 'A' + 1;
     }
+    else if (character >= 'a' && character <= 'z')
+    {
+       result.token_class = SymbolicTokenType::LETTER_S;
+       result.value = character - 'a' + 1;
+    }
     else if (character >= '0' && character <= '9')
     {
         result.token_class = SymbolicTokenType::DIGIT_S;
@@ -126,6 +131,18 @@ void MINI_BASIC_Lexical_analyzer::start_LA(string name_file)
       cout << "Couldn't open the file " << name_file << endl;
       return;
    }
+
+   //Tests flags
+   bool flag_work_state = false;
+
+   //Initial state
+   q = &MINI_BASIC_Lexical_analyzer::A1;
+   next();
+
+   //Initial table operands
+   table_operands.assign(287, 0);
+
+   func prev_func = q;
 
    while (true)
    {
@@ -278,7 +295,7 @@ void MINI_BASIC_Lexical_analyzer::A1()
       q = &MINI_BASIC_Lexical_analyzer::A1;
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT1;
+      EXIT1();
       break;
    default:
       Error();
@@ -320,7 +337,7 @@ void MINI_BASIC_Lexical_analyzer::A2()
       q = &MINI_BASIC_Lexical_analyzer::A1;
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT1;
+      EXIT1();
       break;
    default:
       Error();
@@ -362,7 +379,7 @@ void MINI_BASIC_Lexical_analyzer::A3()
       q = &MINI_BASIC_Lexical_analyzer::A1;
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT1;
+      EXIT1();
       break;
    default:
       Error();
@@ -401,7 +418,7 @@ void MINI_BASIC_Lexical_analyzer::C1()
       q = &MINI_BASIC_Lexical_analyzer::C1;
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT3;
+      EXIT3();
       break;
    default:
       Error();
@@ -440,7 +457,7 @@ void MINI_BASIC_Lexical_analyzer::C2()
       A1a();
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT4;
+      EXIT4();
       break;
    default:
       Error();
@@ -482,7 +499,7 @@ void MINI_BASIC_Lexical_analyzer::D1()
       A1b();
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT3;
+      EXIT3();
       break;
    default:
       Error();
@@ -521,7 +538,7 @@ void MINI_BASIC_Lexical_analyzer::D2()
       A1c();
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT4;
+      EXIT4();
       break;
    default:
       Error();
@@ -599,7 +616,7 @@ void MINI_BASIC_Lexical_analyzer::D5()
       A1d();
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT5;
+      EXIT5();
       break;
    default:
       Error();
@@ -747,24 +764,31 @@ void MINI_BASIC_Lexical_analyzer::G1()
    switch (character.token_class)
    {
    case LETTER_S:
+      next();
       q = &MINI_BASIC_Lexical_analyzer::G1;
       break;
    case DIGIT_S:
+      next();
       q = &MINI_BASIC_Lexical_analyzer::G1;
       break;
    case ARITHMETIC_OPERATION_S:
+      next();
       q = &MINI_BASIC_Lexical_analyzer::G1;
       break;
    case RELATION_S:
+      next();
       q = &MINI_BASIC_Lexical_analyzer::G1;
       break;
    case O_BRACE_S:
+      next();
       q = &MINI_BASIC_Lexical_analyzer::G1;
       break;
    case C_BRACE_S:
+      next();
       q = &MINI_BASIC_Lexical_analyzer::G1;
       break;
    case DOT_S:
+      next();
       q = &MINI_BASIC_Lexical_analyzer::G1;
       break;
    case SPACE_S:
@@ -772,10 +796,11 @@ void MINI_BASIC_Lexical_analyzer::G1()
       q = &MINI_BASIC_Lexical_analyzer::G1;
       break;
    case LF_S:
+      next();
       q = &MINI_BASIC_Lexical_analyzer::A1;
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT1;
+      EXIT1();
       break;
    default:
       Error();
@@ -817,7 +842,7 @@ void MINI_BASIC_Lexical_analyzer::H1()
       A1a();
       break;
    case END_OF_FILE_S:
-      q = &MINI_BASIC_Lexical_analyzer::EXIT1;
+      EXIT1();
       break;
    default:
       Error();
@@ -1023,7 +1048,7 @@ void MINI_BASIC_Lexical_analyzer::A2n()
 
 void MINI_BASIC_Lexical_analyzer::A2o()
 {
-   if (char_class_value_reg == 1)
+   if (character.value == 1)
       A2b();
    else
    {
@@ -1438,7 +1463,7 @@ void MINI_BASIC_Lexical_analyzer::M1()
    }
    else if (table_detection[detection_reg].alt != -1)
    {
-      detection_reg = table_detection[detection_reg].alt - 1;
+      detection_reg = table_detection[detection_reg].alt;
    }
    else    
       Error_Handler();
@@ -1463,7 +1488,10 @@ void MINI_BASIC_Lexical_analyzer::M3()
       B1b();
    }
    else
+   {
+      next();
       q = &MINI_BASIC_Lexical_analyzer::D3;
+   }
 }
 
 void MINI_BASIC_Lexical_analyzer::EXIT1()

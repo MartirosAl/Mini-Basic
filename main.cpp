@@ -1,5 +1,5 @@
 
-#include "MB Lexical analyzer.h"
+#include "MB Sintax analyzer.h"
 using namespace std;
 int main()
 { 
@@ -8,5 +8,12 @@ int main()
    A.Print_table_tokens();
    A.Print_table_operands();
    A.Print_table_labels();
+   
+   MINI_BASIC_Syntax_analyzer B;
+   B.start_SA("Test1.txt");
+   cout << "TA" << endl;
+   B.PrintTA();
+   cout << "Stk" << endl;
+   B.PrintStk();
    return 0;
 }

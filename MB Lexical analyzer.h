@@ -75,6 +75,8 @@ protected:
    //Флаг для операнда (переменная / константа)
    bool flag_operand = 0;
 
+   bool flag_error = 0;
+
 
    SymbolicToken Transliterator(int character);
 

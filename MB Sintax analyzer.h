@@ -20,7 +20,7 @@ protected:
    vector<Atom> table_atoms;
 
    typedef void(MINI_BASIC_Syntax_analyzer::* func) ();
-   func Control_Table[33][23];
+   func Control_Table[34][24];
 
    stack <int> stk;
    int in; //”казатель на вход
@@ -35,6 +35,7 @@ protected:
    int NTtemp; //”казатель на первый свободный элемент в таблицы промежуточных результатов
    int NTA; //”казатель на первый свободный элемент таблицы атомов
 
+   int Find_label(int a);
 
    void Create_Big_Table();
 

@@ -200,7 +200,7 @@ public:
       function = &standart;
       size_table = 300;
       size_main_area = 100 + 1;
-      next_in_alt_table = 100 + 2;
+      next_in_alt_table = 100 + 1;
 
       Create_table();
    }

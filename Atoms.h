@@ -15,9 +15,9 @@ const vector<string> AtomTypeString
 
 struct Atom
 {
-   AtomType type = start_A;
-   int attribute1 = 0;
-   int attribute2 = 0;
-   int attribute3 = 0;
-   int attribute4 = 0;
+   int type = start_A;
+   int attribute1 = -1;
+   int attribute2 = -1;
+   int attribute3 = -1;
+   int attribute4 = -1;
 };

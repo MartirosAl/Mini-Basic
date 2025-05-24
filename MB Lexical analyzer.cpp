@@ -155,11 +155,19 @@ void MINI_BASIC_Lexical_analyzer::start_LA(string name_file)
 
       if (q == &MINI_BASIC_Lexical_analyzer::EXIT1 || q == &MINI_BASIC_Lexical_analyzer::EXIT2 || q == &MINI_BASIC_Lexical_analyzer::EXIT3 || q == &MINI_BASIC_Lexical_analyzer::EXIT4 || q == &MINI_BASIC_Lexical_analyzer::EXIT5 || q == &MINI_BASIC_Lexical_analyzer::EXIT6)
       {
+         if (table_number_string.error_finder())
+         {
+            flag_error = 1;
+            cout << "Error in labels" << endl << "Code 1" << endl;
+            return;
+         }
          cout << "Code 0" << endl;
          return;
       }
 
    }
+
+   
 
 }
 

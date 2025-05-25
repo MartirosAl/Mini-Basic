@@ -66,7 +66,7 @@ protected:
    //TL
    vector<Token> table_tokens;
 
-   //Счетчик лексем
+   //Счетчик лексем 
    int counter_tokens = 0;
 
    //Переменная для хэш-таблицы
@@ -237,7 +237,7 @@ protected:
 
    void Create_Token();
 
-   void Error_Handler();
+   void Error_Handler(string error = " ");
 
 
    struct Keyword{

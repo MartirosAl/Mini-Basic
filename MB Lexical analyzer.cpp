@@ -158,10 +158,8 @@ void MINI_BASIC_Lexical_analyzer::start_LA(string name_file)
          if (table_number_string.error_finder())
          {
             flag_error = 1;
-            cout << "Error in labels" << endl << "Code 1" << endl;
-            return;
+            cout << "Error in labels" << endl;
          }
-         cout << "Code 0" << endl;
          return;
       }
 
@@ -270,7 +268,9 @@ void MINI_BASIC_Lexical_analyzer::Print_table_operands()
    cout << "--------------------------" << endl;
    for (int i = 0; i < table_operands.size(); i++)
    {
-      if (i <= 286 && table_operands[i] != 0)
+      if (i <= 26 && table_operands[i] != 0)
+         cout << i << "\t | " << (char)((i % 27) + 'A' - 1) << (((i / 27) == 0) ? ' ' : (char)(i / 27 + '0' - 1)) << "\t\t | " << endl;
+      else if (i <= 286 && table_operands[i] != 0)
          cout << i << "\t | " << (char)((i % 26) + 'A' - 1) << (((i / 26) == 0)? ' ' : (char)(i/26 + '0' - 1)) << "\t\t | " << endl;
       else if (i > 286)
          cout << i << "\t | " << table_operands[i] << "\t\t | " << endl;
@@ -920,7 +920,10 @@ void MINI_BASIC_Lexical_analyzer::DA3D()
 
 void MINI_BASIC_Lexical_analyzer::DA1E()
 {
-   index_cur_number = table_number_string.insert(number_string_reg);
+   if (table_number_string.find(number_string_reg))
+      Error_Handler("There is already such a label.");
+   else
+      index_cur_number = table_number_string.insert(number_string_reg);
 }
 
 
@@ -1600,8 +1603,10 @@ void MINI_BASIC_Lexical_analyzer::Create_Token()
    table_tokens.push_back(T);
 }
 
-void MINI_BASIC_Lexical_analyzer::Error_Handler()
+void MINI_BASIC_Lexical_analyzer::Error_Handler(string error)
 {
+   flag_error = 1;
+   cout << error << " ";
    cout << "JOPA" << endl;
    q = &MINI_BASIC_Lexical_analyzer::Error;
 }

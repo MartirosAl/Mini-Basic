@@ -920,7 +920,7 @@ void MINI_BASIC_Lexical_analyzer::DA3D()
 
 void MINI_BASIC_Lexical_analyzer::DA1E()
 {
-   if (table_number_string.find(number_string_reg))
+   if (table_number_string.find_and_return_index(number_string_reg) != -1 && lex_class_reg == LABLE_T)
       Error_Handler("There is already such a label.");
    else
       index_cur_number = table_number_string.insert(number_string_reg);

@@ -1501,7 +1501,7 @@ void MINI_BASIC_Lexical_analyzer::M3()
 
 void MINI_BASIC_Lexical_analyzer::EXIT1()
 {
-   lex_class_reg = END_T;
+   lex_class_reg = END_OF_FILE_T;
    Create_Token();
    q = &MINI_BASIC_Lexical_analyzer::EXIT1;
 }

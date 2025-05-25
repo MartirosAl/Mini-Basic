@@ -67,8 +67,13 @@ void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
    
    while (in < table_tokens.size())
    {
+      
       //70
       temp_par = stk.top();
+      cout << temp_par << " " << table_tokens[in].type << endl;
+      PrintStk();
+      PrintTA();
+      cout << endl;
       (this->*Control_Table[temp_par][table_tokens[in].type])();
    }
 }
@@ -182,7 +187,7 @@ void MINI_BASIC_Syntax_analyzer::b()
 }
 void MINI_BASIC_Syntax_analyzer::c()
 {
-   Create_Atom(1);
+   Create_Atom(0);
    in++;
 }
 void MINI_BASIC_Syntax_analyzer::d()
@@ -193,7 +198,7 @@ void MINI_BASIC_Syntax_analyzer::d()
    stk.pop();
    k2 = stk.top();
    stk.pop();
-   Create_Atom(3, k1, k2);
+   Create_Atom(2, k1, k2);
 }
 void MINI_BASIC_Syntax_analyzer::e()
 {
@@ -207,7 +212,7 @@ void MINI_BASIC_Syntax_analyzer::e()
    stk.pop();
    s = stk.top();
    stk.pop();
-   Create_Atom(7, p, q, r, s);
+   Create_Atom(6, p, q, r, s);
 
 }
 void MINI_BASIC_Syntax_analyzer::f()
@@ -218,7 +223,7 @@ void MINI_BASIC_Syntax_analyzer::f()
    stk.pop();
    q = stk.top();
    stk.pop();
-   Create_Atom(8, p, q);
+   Create_Atom(7, p, q);
 }
 void MINI_BASIC_Syntax_analyzer::g()
 {
@@ -226,7 +231,7 @@ void MINI_BASIC_Syntax_analyzer::g()
    stk.pop();
    p = stk.top();
    stk.pop();
-   Create_Atom(9, p);
+   Create_Atom(8, p);
 }
 void MINI_BASIC_Syntax_analyzer::h()
 {
@@ -240,7 +245,7 @@ void MINI_BASIC_Syntax_analyzer::h()
    stk.pop();
    s = stk.top();
    stk.pop();
-   Create_Atom(10, p, q, r, s);
+   Create_Atom(9, p, q, r, s);
 }
 void MINI_BASIC_Syntax_analyzer::i()
 {
@@ -266,7 +271,7 @@ void MINI_BASIC_Syntax_analyzer::l()
    stk.pop();
    r = stk.top();
    stk.pop();
-   Create_Atom(12, p, q, r);
+   Create_Atom(11, p, q, r);
 }
 void MINI_BASIC_Syntax_analyzer::j()
 {
@@ -276,7 +281,7 @@ void MINI_BASIC_Syntax_analyzer::j()
    stk.pop();
    q = stk.top();
    stk.pop();
-   Create_Atom(11, p, q);
+   Create_Atom(10, p, q);
 }
 void MINI_BASIC_Syntax_analyzer::k()
 {
@@ -284,7 +289,7 @@ void MINI_BASIC_Syntax_analyzer::k()
    stk.pop();
    p = stk.top();
    stk.pop();
-   Create_Atom(4, p);
+   Create_Atom(3, p);
 }
 void MINI_BASIC_Syntax_analyzer::n()
 {
@@ -296,7 +301,7 @@ void MINI_BASIC_Syntax_analyzer::n()
    stk.pop();
    r = stk.top();
    stk.pop();
-   Create_Atom(14, p, q, r);
+   Create_Atom(13, p, q, r);
 }
 void MINI_BASIC_Syntax_analyzer::m()
 {
@@ -308,7 +313,7 @@ void MINI_BASIC_Syntax_analyzer::m()
    stk.pop();
    r = stk.top();
    stk.pop();
-   Create_Atom(13, p, q, r);
+   Create_Atom(12, p, q, r);
 }
 void MINI_BASIC_Syntax_analyzer::o()
 {
@@ -320,7 +325,7 @@ void MINI_BASIC_Syntax_analyzer::o()
    stk.pop();
    r = stk.top();
    stk.pop();
-   Create_Atom(15, p, q, r);
+   Create_Atom(14, p, q, r);
 }
 void MINI_BASIC_Syntax_analyzer::p()
 {
@@ -332,7 +337,7 @@ void MINI_BASIC_Syntax_analyzer::p()
    stk.pop();
    r = stk.top();
    stk.pop();
-   Create_Atom(16, p, q, r);
+   Create_Atom(15, p, q, r);
 }
 void MINI_BASIC_Syntax_analyzer::q()
 {
@@ -342,7 +347,7 @@ void MINI_BASIC_Syntax_analyzer::q()
    stk.pop();
    k2 = stk.top();
    stk.pop();
-   Create_Atom(17, k1, k2);
+   Create_Atom(16, k1, k2);
 }
 void MINI_BASIC_Syntax_analyzer::r()
 {
@@ -352,7 +357,7 @@ void MINI_BASIC_Syntax_analyzer::r()
    stk.pop();
    k2 = stk.top();
    stk.pop();
-   Create_Atom(18, k1, k2);
+   Create_Atom(17, k1, k2);
 }
 
 void MINI_BASIC_Syntax_analyzer::F1()
@@ -360,7 +365,7 @@ void MINI_BASIC_Syntax_analyzer::F1()
    stk.pop();
    stk.push(16);
    stk.push(2);
-   Create_Atom(2, table_tokens[in].value);
+   Create_Atom(1, table_tokens[in].value);
 
    num_str = table_number_string[table_tokens[in].value];
    in++;
@@ -373,26 +378,26 @@ void MINI_BASIC_Syntax_analyzer::F2()
 }
 void MINI_BASIC_Syntax_analyzer::F3()
 {
-   Create_Atom(2, table_tokens[in].value);
+   Create_Atom(1, table_tokens[in].value);
    num_str = table_number_string[table_tokens[in].value];
    in++;
 }
 void MINI_BASIC_Syntax_analyzer::F4()
 {
    stk.pop();
-   stk.push(4);
+   stk.push(4);//другие строки
    stk.push(0);
    stk.push(table_tokens[in].value);
-   stk.push(19);
+   stk.push(19);//присв
    stk.push(3);
-   stk.push(5);
+   stk.push(5);//выражение
    in++;
 }
 void MINI_BASIC_Syntax_analyzer::F5()
 {
    stk.pop();
    stk.push(4);
-   Create_Atom(4, table_tokens[in].value);
+   Create_Atom(3, table_tokens[in].value);
    in++;
 }
 void MINI_BASIC_Syntax_analyzer::F6()
@@ -418,14 +423,14 @@ void MINI_BASIC_Syntax_analyzer::F7()
 {
    stk.pop();
    stk.push(4);
-   Create_Atom(5, table_tokens[in].value);
+   Create_Atom(4, table_tokens[in].value);
    in++;
 }
 void MINI_BASIC_Syntax_analyzer::F8()
 {
    stk.pop();
    stk.push(4);
-   Create_Atom(6);
+   Create_Atom(5);
    in++;
 }
 void MINI_BASIC_Syntax_analyzer::F9()
@@ -440,7 +445,7 @@ void MINI_BASIC_Syntax_analyzer::F9()
    NTM++;
    v = NTM;//значение поставляемому другим вызовом процедуры НОВТАМ
    NTM++;
-   y = in;
+   y = num_str;
    stk.pop();
    stk.push(4);
    stk.push(v);
@@ -506,12 +511,11 @@ void MINI_BASIC_Syntax_analyzer::F12()
    in++;
 }
 
-
 void MINI_BASIC_Syntax_analyzer::F13()
 {
    stk.pop();
    stk.push(2);
-   Create_Atom(2, table_tokens[in].value);
+   Create_Atom(1, table_tokens[in].value);
    num_str = table_number_string[table_tokens[in].value];
    in++;
 }
@@ -536,7 +540,6 @@ void MINI_BASIC_Syntax_analyzer::F15()
    NTtemp++;
    in++;
 }
-
 
 void MINI_BASIC_Syntax_analyzer::F16()
 {
@@ -765,7 +768,7 @@ void MINI_BASIC_Syntax_analyzer::F28()
       stk.pop();
       i--;
    }
-   while (stk.top() != 0)
+   while (stk.top() != 0) //что-то странное
    {
       tmp.push(stk.top());
       stk.pop();

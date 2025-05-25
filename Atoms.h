@@ -21,3 +21,13 @@ struct Atom
    int attribute3 = -1;
    int attribute4 = -1;
 };
+
+const vector<string> TableType1
+{
+   "<Programm>", "<Programm's body>", "<Step>", "<Other rows>", "<Expression>", "<Term>", "<Multiplier>", "<E-list>", "<T-list>", "<F-list>", "Relation", "End cycle", "Transition", "Right bracket", "End", "To", "@", "{Assign}", "{Conditional transition}", "{Store}", "{Label}", "{Check}", "{Control}", "{Increase}", "{Transition}", "{Addition}", "{Substract}", "{Multiplication}", "{Division}", "{Power}", "{Plus}", "{Minus}"
+};
+
+const vector<string> TableType2
+{
+   "LABEL", "Operand", "Relation", "NEXT", "LET", "FOR", "GOTO", "GOSUB", "Left bracket", "Right bracket", "IF", "RETURN", "END", "TO", "STEP", "COMMENT", "+", "-", "*", "/", "^", "ERROR", "END_MARK"
+};

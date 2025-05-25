@@ -3,7 +3,7 @@
 using namespace std;
 int main()
 { 
-   string name_file = "Test2.txt";
+   string name_file = "Test3.txt";
    MINI_BASIC_Lexical_analyzer A;
    A.start_LA(name_file);
    A.Print_table_tokens();
@@ -12,9 +12,7 @@ int main()
    
    MINI_BASIC_Syntax_analyzer B;
    B.start_SA(name_file);
-   cout << "TA" << endl;
    B.PrintTA();
-   cout << "Stk" << endl;
    B.PrintStk();
    return 0;
 }

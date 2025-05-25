@@ -39,7 +39,8 @@ struct Token
 
 enum SymbolicTokenType
 {
-   start_S = -1,
+   RUS_LETTER_S = -2,
+   start_S,
    LETTER_S,
    DIGIT_S,
    ARITHMETIC_OPERATION_S,

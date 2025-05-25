@@ -185,6 +185,9 @@ void MINI_BASIC_Lexical_analyzer::Print_table_tokens()
          break;
 
       case OPERAND_T:
+      case LET_T:
+      case FOR_T:
+      case NEXT_T:
          if (table_tokens[i].value <= 286)
             cout << (char)((table_tokens[i].value % 26) + 'A' - 1) << (((table_tokens[i].value / 26) == 0) ? ' ' : (char)(table_tokens[i].value / 26 + '0' - 1));
          else
@@ -194,12 +197,6 @@ void MINI_BASIC_Lexical_analyzer::Print_table_tokens()
       case GOTO_T:
       case GOSUB_T:
          cout << table_number_string[table_tokens[i].value];
-         break;
-
-      case LET_T:
-      case FOR_T:
-      case NEXT_T:
-         cout << table_tokens[i].value;
          break;
 
       case RELATIONSHIP_OPERATIONS_T:
@@ -501,7 +498,7 @@ void MINI_BASIC_Lexical_analyzer::D1()
       break;
    case SPACE_S:
       next();
-      q = &MINI_BASIC_Lexical_analyzer::D2;
+      q = &MINI_BASIC_Lexical_analyzer::D1;
       break;
    case LF_S:
       A1b();
@@ -811,7 +808,7 @@ void MINI_BASIC_Lexical_analyzer::G1()
       EXIT1();
       break;
    default:
-      Error();
+      next();
       break;
    }
 }
@@ -1384,7 +1381,7 @@ void MINI_BASIC_Lexical_analyzer::F1a()
 
 void MINI_BASIC_Lexical_analyzer::F1b()
 {
-   lex_class_reg = TO_T;
+   lex_class_reg = FOR_T;
    next();
    q = &MINI_BASIC_Lexical_analyzer::F1;
 }

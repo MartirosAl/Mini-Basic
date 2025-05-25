@@ -87,6 +87,7 @@ void MINI_BASIC_Syntax_analyzer::Create_Atom(int type, int a, int b, int c, int 
 
 void MINI_BASIC_Syntax_analyzer::PrintTA()
 {
+   cout << "TA" << endl << string(25, '-') << endl;
    for (int i = 0; i < table_atoms.size(); i++)
    {
       cout << AtomTypeString[table_atoms[i].type];
@@ -98,13 +99,14 @@ void MINI_BASIC_Syntax_analyzer::PrintTA()
          cout << " " << table_atoms[i].attribute3;
       if (table_atoms[i].attribute4 != -1)
          cout << " " << table_atoms[i].attribute4;
-      cout << endl;
+      cout<< endl << string(25, '-') << endl;
    }
    
 }
 
 void MINI_BASIC_Syntax_analyzer::PrintStk()
 {
+   cout << "Stk" << endl;
    stack<int> temp;
    for (int i = 0; i < stk.size();)
    {

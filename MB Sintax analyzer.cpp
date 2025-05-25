@@ -67,6 +67,7 @@ void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
    
    while (in < table_tokens.size())
    {
+      //70
       temp_par = stk.top();
       (this->*Control_Table[temp_par][table_tokens[in].type])();
    }
@@ -88,17 +89,18 @@ void MINI_BASIC_Syntax_analyzer::PrintTA()
 {
    for (int i = 0; i < table_atoms.size(); i++)
    {
-      cout << table_atoms[i].type;
-      if (table_atoms[i].attribute1)
+      cout << AtomTypeString[table_atoms[i].type];
+      if (table_atoms[i].attribute1 != -1)
          cout << " " << table_atoms[i].attribute1;
-      if (table_atoms[i].attribute2)
+      if (table_atoms[i].attribute2 != -1)
          cout << " " << table_atoms[i].attribute2;
-      if (table_atoms[i].attribute3)
+      if (table_atoms[i].attribute3 != -1)
          cout << " " << table_atoms[i].attribute3;
-      if (table_atoms[i].attribute4)
+      if (table_atoms[i].attribute4 != -1)
          cout << " " << table_atoms[i].attribute4;
+      cout << endl;
    }
-   cout << endl;
+   
 }
 
 void MINI_BASIC_Syntax_analyzer::PrintStk()
@@ -106,7 +108,7 @@ void MINI_BASIC_Syntax_analyzer::PrintStk()
    stack<int> temp;
    for (int i = 0; i < stk.size();)
    {
-      cout << stk.top() << " ";
+      cout << stk.top() << " " << endl;
       temp.push(stk.top());
       stk.pop();
    }
@@ -122,7 +124,7 @@ void MINI_BASIC_Syntax_analyzer::Error(string errMsg)
 {
    ofstream
       ferr("errors.txt");
-   ferr << "Oøèáêà: Còpoka" << num_str << ' ' << errMsg;
+   ferr << "Oøèáêà: Còpoka " << num_str << ' ' << errMsg;
    flagErr = true;
    if (table_tokens[in].type == 23)
    {
@@ -130,7 +132,7 @@ void MINI_BASIC_Syntax_analyzer::Error(string errMsg)
    }
    else
    {
-      while (table_tokens[in].type != 1)
+      while (in < table_tokens.size() && table_tokens[in].type != 1)
          in++;
    }
 
@@ -508,7 +510,7 @@ void MINI_BASIC_Syntax_analyzer::F13()
    stk.pop();
    stk.push(2);
    Create_Atom(2, table_tokens[in].value);
-   num_str = (table_tokens[in].value);
+   num_str = table_number_string[table_tokens[in].value];
    in++;
 }
 void MINI_BASIC_Syntax_analyzer::F14()

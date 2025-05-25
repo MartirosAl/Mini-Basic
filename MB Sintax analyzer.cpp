@@ -70,10 +70,10 @@ void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
       
       //70
       temp_par = stk.top();
-      cout << temp_par << " " << table_tokens[in].type << endl;
-      PrintStk();
-      PrintTA();
-      cout << endl;
+      //cout << temp_par << " " << table_tokens[in].type << endl;
+      //PrintStk();
+      //PrintTA();
+      //cout << endl;
       (this->*Control_Table[temp_par][table_tokens[in].type])();
    }
 }

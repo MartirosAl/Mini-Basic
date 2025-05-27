@@ -14,6 +14,8 @@ public:
    MINI_BASIC_Syntax_analyzer();
 
    void start_SA(string name_file);
+   
+   bool test_flag = 0;
 
 protected:
 

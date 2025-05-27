@@ -254,7 +254,6 @@ void MINI_BASIC_Lexical_analyzer::Print_table_tokens()
       case REM_T:
       case ERROR_T:
       case END_OF_FILE_T:
-      case COMMENT_T:
          ;
          break;
       }
@@ -1405,7 +1404,7 @@ void MINI_BASIC_Lexical_analyzer::F3a()
 
 void MINI_BASIC_Lexical_analyzer::G1a()
 {
-   lex_class_reg = COMMENT_T;
+   lex_class_reg = REM_T;
    Create_Token();
    next();
    q = &MINI_BASIC_Lexical_analyzer::G1;
@@ -1564,7 +1563,7 @@ void MINI_BASIC_Lexical_analyzer::Create_Token()
          table_operands[index_reg] = 1;
          T.value = index_reg;
       }
-      else                    //Константа
+      else if (flag_operand == 1) //Константа
          T.value = ptr_to_free - 1;
       break;
 
@@ -1595,7 +1594,6 @@ void MINI_BASIC_Lexical_analyzer::Create_Token()
    case REM_T:
    case ERROR_T:
    case END_OF_FILE_T:
-   case COMMENT_T:
       T.value = character.value;
       break;
    }

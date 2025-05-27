@@ -4,6 +4,13 @@ MINI_BASIC_Syntax_analyzer::MINI_BASIC_Syntax_analyzer()
 {
    Create_Big_Table();
 
+   ofstream ferr("Errors.txt");
+   if (ferr.is_open()) {
+       ferr.clear();
+       ferr.close();
+   }
+
+
    stk.push(18);
    stk.push(1);
    NTA = 0;
@@ -70,11 +77,19 @@ void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
       
       //70
       temp_par = stk.top();
-      //cout << temp_par << " " << table_tokens[in].type << endl;
-      //PrintStk();
-      //PrintTA();
-      //cout << endl;
+      if (test_flag)
+      {
+          cout << temp_par << " " << table_tokens[in].type << endl;
+          PrintStk();
+          PrintTA();
+          cout << endl;
+      }
       (this->*Control_Table[temp_par][table_tokens[in].type])();
+   }
+
+   if (flagErr)
+   {
+       cout << "Errors are present" << endl;
    }
 }
 
@@ -127,12 +142,12 @@ void MINI_BASIC_Syntax_analyzer::PrintStk()
    cout << endl;
 }
 
-void MINI_BASIC_Syntax_analyzer::Error(string errMsg)
+void MINI_BASIC_Syntax_analyzer::Error(string error)
 {
-   ofstream
-      ferr("errors.txt");
-   ferr << "Oøèáêà: Còpoka " << num_str << ' ' << errMsg;
+   ofstream ferr("errors.txt");
+   ferr << "Oøèáêà: Còpoka " << num_str << ' ' << error;
    flagErr = true;
+
    if (table_tokens[in].type == 23)
    {
       in++;
@@ -143,17 +158,17 @@ void MINI_BASIC_Syntax_analyzer::Error(string errMsg)
          in++;
    }
 
-   if (stk.top() == 1 || stk.top() == 2 || stk.top() == 4) return;
+   if (stk.top() == 1 || stk.top() == 2 || stk.top() == 4) 
+      return;
+   else if (stk.top() == 16 || stk.top() == 18)
+   {
+      stk.pop(); stk.push(2);
+   }
    else
-      if (stk.top() == 16 || stk.top() == 18)
-      {
-         stk.pop(); stk.push(2);
-      }
-      else
-      {
-         while (stk.top() != 4)
-            stk.pop();
-      }
+   {
+      while (stk.top() != 4)
+         stk.pop();
+   }
 
    ferr.close();
 }
@@ -979,13 +994,13 @@ void MINI_BASIC_Syntax_analyzer::Create_Big_Table()
    Control_Table[3][6] = &MINI_BASIC_Syntax_analyzer::G1;
    Control_Table[3][7] = &MINI_BASIC_Syntax_analyzer::G1;
    Control_Table[3][8] = &MINI_BASIC_Syntax_analyzer::G1;
-   Control_Table[3][9] = &MINI_BASIC_Syntax_analyzer::G2;
-   Control_Table[3][10] = &MINI_BASIC_Syntax_analyzer::G1;
+   Control_Table[3][9] = &MINI_BASIC_Syntax_analyzer::G1;
+   Control_Table[3][10] = &MINI_BASIC_Syntax_analyzer::G2;
    Control_Table[3][11] = &MINI_BASIC_Syntax_analyzer::G1;
    Control_Table[3][12] = &MINI_BASIC_Syntax_analyzer::G1;
    Control_Table[3][13] = &MINI_BASIC_Syntax_analyzer::G1;
-   Control_Table[3][14] = &MINI_BASIC_Syntax_analyzer::F10;
-   Control_Table[3][15] = &MINI_BASIC_Syntax_analyzer::G1;
+   Control_Table[3][14] = &MINI_BASIC_Syntax_analyzer::G1;
+   Control_Table[3][15] = &MINI_BASIC_Syntax_analyzer::F10;
    Control_Table[3][16] = &MINI_BASIC_Syntax_analyzer::G1;
    Control_Table[3][17] = &MINI_BASIC_Syntax_analyzer::G1;
    Control_Table[3][18] = &MINI_BASIC_Syntax_analyzer::G1;
@@ -1224,7 +1239,7 @@ void MINI_BASIC_Syntax_analyzer::Create_Big_Table()
    Control_Table[13][1] = &MINI_BASIC_Syntax_analyzer::O;
    Control_Table[13][2] = &MINI_BASIC_Syntax_analyzer::O;
    Control_Table[13][3] = &MINI_BASIC_Syntax_analyzer::O;
-   Control_Table[13][4] = &MINI_BASIC_Syntax_analyzer::d;
+   Control_Table[13][4] = &MINI_BASIC_Syntax_analyzer::b;
    Control_Table[13][5] = &MINI_BASIC_Syntax_analyzer::O;
    Control_Table[13][6] = &MINI_BASIC_Syntax_analyzer::O;
    Control_Table[13][7] = &MINI_BASIC_Syntax_analyzer::O;

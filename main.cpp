@@ -1,18 +1,12 @@
-
-#include "MB Sintax analyzer.h"
+#include <iostream>
+#include "Lexical_Analyzer.h"
 using namespace std;
+
 int main()
-{ 
-   string name_file = "Test3.txt";
-   MINI_BASIC_Lexical_analyzer A;
-   A.start_LA(name_file);
-   A.Print_table_tokens();
-   A.Print_table_operands();
-   A.Print_table_labels();
+{
+   TableToken result;
+   result.Lexical_Analyzer("Test4.txt");
    
-   //MINI_BASIC_Syntax_analyzer B;
-   //B.start_SA(name_file);
-   //B.PrintTA();
-   //B.PrintStk();
+   result.Print_Table_Token();
    return 0;
 }

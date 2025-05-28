@@ -24,6 +24,7 @@ MINI_BASIC_Syntax_analyzer::MINI_BASIC_Syntax_analyzer()
 void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
 {
    start_LA(name_file);
+   Print_table_tokens();
 
    if (flag_error == true)
       return;
@@ -510,7 +511,7 @@ void MINI_BASIC_Syntax_analyzer::F10()
 }
 void MINI_BASIC_Syntax_analyzer::F11()
 {
-   table_operands[ptr_to_free] = 1;
+   table_operands.push_back(1);
    stk.pop();
    stk.pop();
    int p = stk.top();
@@ -518,6 +519,8 @@ void MINI_BASIC_Syntax_analyzer::F11()
    stk.pop();
    stk.push(table_operands[ptr_to_free]);
    stk.push(p);
+
+   ptr_to_free++;
 }
 void MINI_BASIC_Syntax_analyzer::F12()
 {

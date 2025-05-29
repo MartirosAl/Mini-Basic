@@ -1071,6 +1071,7 @@ void MINI_BASIC_Lexical_analyzer::A2p()
    {
    case 1:
       Error_Handler();
+      break;
    case 2:
       if (character.value == 1/* = */)
          relation_value_reg = 4;
@@ -1078,11 +1079,15 @@ void MINI_BASIC_Lexical_analyzer::A2p()
          relation_value_reg = 6;
       else
          Error_Handler();
+      break;
    case 3:
       if (character.value == 1/* = */)
          relation_value_reg = 5;
       else
          Error_Handler();
+      break;
+   default:
+       Error_Handler();
    }
    A2b();
    q = &MINI_BASIC_Lexical_analyzer::A2;

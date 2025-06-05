@@ -16,7 +16,7 @@ int main()
    //B.PrintTA();
    //B.PrintStk();
 
-   Translator_to_assembler C("Test2.txt");
+   Translator_to_assembler C("Test3.txt");
 
    C.Generate_assembler_code("Code.asm");
 

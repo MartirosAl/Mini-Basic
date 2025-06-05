@@ -62,7 +62,7 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 				file << "\t\t" << "call label_" << i.attribute1 << endl;
 				file << "\tlabel_" << last_lable << " endp" << endl;
 			}
-			file << "\tlabel_" << i.attribute1 << ": " << endl;
+			file << "\tlabel_" << i.attribute1 << " proc " << endl;
 			last_lable = i.attribute1;
 			break;
 
@@ -111,8 +111,8 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 			break;
 
 		case 7:
-			file << "\t\tmov eax, " << N_to_S(i.attribute2) << endl;
-			file << "\t\tmov " << N_to_S(i.attribute1) << ", eax" << endl;
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tmov " << N_to_S(i.attribute2) << ", eax" << endl;
 			break;
 
 		case 8:
@@ -142,7 +142,7 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 
 		case 12:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
-			file << "\t\tsub " << N_to_S(i.attribute2) << endl;
+			file << "\t\tsub eax, " << N_to_S(i.attribute2) << endl;
 			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
@@ -201,15 +201,15 @@ string Translator_to_assembler::N_to_S(int i) const
 	}
 	else if (i >= ptr_to_free && i <= NTtemp)
 	{
-		res = "temp" + to_string(i);
+		res = "temp" + to_string((int)i);
 	}
 	else if (i >= 700 && i < NTX)
 	{
-		res = "temp" + to_string(i);
+		res = "temp" + to_string((int)i);
 	}
 	else
 	{
-		res = to_string(table_operands[i]);
+		res = to_string((int)table_operands[i]);
 	}
 
 	return res;

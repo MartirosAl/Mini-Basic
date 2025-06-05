@@ -10,6 +10,12 @@ MINI_BASIC_Syntax_analyzer::MINI_BASIC_Syntax_analyzer()
        ferr.close();
    }
 
+   ofstream fa("Atoms.txt");
+   if (fa.is_open()) {
+       fa.clear();
+       fa.close();
+   }
+
 
    stk.push(18);
    stk.push(1);
@@ -28,6 +34,8 @@ void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
 
    if (flag_error == true)
       return;
+
+   ofstream fa("Atoms.txt");
 
    NTtemp = ptr_to_free;
    NTX = 700;
@@ -78,11 +86,24 @@ void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
       
       //70
       temp_par = stk.top();
+
+      
+      fa << temp_par << " " << table_tokens[in].type << endl;
+      
+
+      PrintStk_in_file(fa);
+      PrintTA_in_file(fa);
+
+      fa << endl;
+      
+
       if (test_flag)
       {
           cout << temp_par << " " << table_tokens[in].type << endl;
+
           PrintStk();
           PrintTA();
+
           cout << endl;
       }
       (this->*Control_Table[temp_par][table_tokens[in].type])();
@@ -92,6 +113,8 @@ void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
    {
        cout << "Errors are present" << endl;
    }
+
+   fa.close();
 }
 
 void MINI_BASIC_Syntax_analyzer::Create_Atom(int type, int a, int b, int c, int d)
@@ -122,16 +145,56 @@ void MINI_BASIC_Syntax_analyzer::PrintTA()
          cout << " " << table_atoms[i].attribute4;
       cout<< endl << string(25, '-') << endl;
    }
+
    
 }
 
 void MINI_BASIC_Syntax_analyzer::PrintStk()
 {
-   cout << "Stk" << endl;
+    cout << "Stk" << endl;
+    stack<int> temp;
+    for (int i = 0; i < stk.size();)
+    {
+        cout << stk.top() << " " << endl;
+        temp.push(stk.top());
+        stk.pop();
+    }
+    for (int i = 0; i < temp.size();)
+    {
+        stk.push(temp.top());
+        temp.pop();
+    }
+    cout << endl;
+
+}
+
+
+void MINI_BASIC_Syntax_analyzer::PrintTA_in_file(ofstream& fa)
+{
+    fa << "TA" << endl << string(25, '-') << endl;
+    for (int i = 0; i < table_atoms.size(); i++)
+    {
+        fa << AtomTypeString[table_atoms[i].type];
+        if (table_atoms[i].attribute1 != -1)
+            fa << " " << table_atoms[i].attribute1;
+        if (table_atoms[i].attribute2 != -1)
+            fa << " " << table_atoms[i].attribute2;
+        if (table_atoms[i].attribute3 != -1)
+            fa << " " << table_atoms[i].attribute3;
+        if (table_atoms[i].attribute4 != -1)
+            fa << " " << table_atoms[i].attribute4;
+        fa << endl << string(25, '-') << endl;
+    }
+
+}
+
+void MINI_BASIC_Syntax_analyzer::PrintStk_in_file(ofstream& fa)
+{
+   fa << "Stk" << endl;
    stack<int> temp;
    for (int i = 0; i < stk.size();)
    {
-      cout << stk.top() << " " << endl;
+      fa << stk.top() << " " << endl;
       temp.push(stk.top());
       stk.pop();
    }
@@ -140,7 +203,8 @@ void MINI_BASIC_Syntax_analyzer::PrintStk()
       stk.push(temp.top());
       temp.pop();
    }
-   cout << endl;
+   fa << endl;
+
 }
 
 void MINI_BASIC_Syntax_analyzer::Error(string error)

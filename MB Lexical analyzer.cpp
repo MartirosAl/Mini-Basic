@@ -164,9 +164,7 @@ void MINI_BASIC_Lexical_analyzer::start_LA(string name_file)
       }
 
    }
-
-   
-
+   stream.close();
 }
 
 void MINI_BASIC_Lexical_analyzer::Print_table_tokens()

@@ -43,6 +43,10 @@ protected:
    void Create_Atom(int type, int a = -1, int b = -1, int c = -1, int d = -1);
 
    void Error(string errMsg);
+
+   void PrintStk_in_file(ofstream& fa);
+
+   void PrintTA_in_file(ofstream& fa);
    
    void F1();
    void F2();

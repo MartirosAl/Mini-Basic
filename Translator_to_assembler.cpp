@@ -38,14 +38,21 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 
 	file << "\t\t" << "temp dd ?" << endl;
 
-	file << "\t.code" << endl << "start:" << endl << endl;
+	file << "\t.code" << endl << "\tstart:" << endl;
+	file << "\t call label_" << table_atoms[0].attribute1 << endl;
+	file << "\t exit" << endl;
 
 	int last_lable = -1;
 	for (auto& i : table_atoms)
 	{
+
 		switch (i.type)
 		{
 		case 0:
+			if (last_lable != -1)
+			{
+				file << "\tlabel_" << last_lable << " endp" << endl;
+			}
 			file << "end start" << endl;
 			break;
 
@@ -65,11 +72,11 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 			break;
 
 		case 3:
-			file << "\t\tcall label_" << N_to_S(i.attribute1) << endl;
+			file << "\t\tcall label_" << i.attribute1 << endl;
 			break;
 
 		case 4:
-			file << "\t\tcall label_" << N_to_S(i.attribute1) << endl;
+			file << "\t\tcall label_" << i.attribute1 << endl;
 			break;
 
 		case 5:
@@ -81,24 +88,24 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 			switch (i.attribute3)
 			{
 			case 1:
-				file << "\t\tJE label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJE label_" << i.attribute4 << endl;
 				break;
 			case 2:
-				file << "\t\tJS label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJS label_" << i.attribute4 << endl;
 				break;
 			case 3:
 				file << "\t\tJNS label_" << N_to_S(i.attribute4) << endl;
 				break;
 			case 4:
-				file << "\t\tJE label_" << N_to_S(i.attribute4) << endl;
-				file << "\t\tJS label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJE label_" << i.attribute4 << endl;
+				file << "\t\tJS label_" << i.attribute4 << endl;
 				break;
 			case 5:
-				file << "\t\tJE label_" << N_to_S(i.attribute4) << endl;
-				file << "\t\tJNS label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJE label_" << i.attribute4 << endl;
+				file << "\t\tJNS label_" << i.attribute4 << endl;
 				break;
 			case 6:
-				file << "\t\tJNE label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJNE label_" << i.attribute4 << endl;
 				break;
 			}
 			break;
@@ -116,8 +123,8 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 		case 9:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
 			file << "\t\tcmp eax, " << N_to_S(i.attribute2) << endl;
-			file << "\t\tJE label_" << N_to_S(i.attribute4) << endl;
-			file << "\t\tJNS label_" << N_to_S(i.attribute4) << endl;
+			file << "\t\tJE label_" << i.attribute4 << endl;
+			file << "\t\tJNS label_" << i.attribute4 << endl;
 			// Что делать со step?
 			break;
 
@@ -175,6 +182,7 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 
 		
 	}
+
 	file.close();
 }
 

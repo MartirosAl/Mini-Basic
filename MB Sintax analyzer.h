@@ -72,7 +72,7 @@ protected:
    void F22();
    void F23();
    void F24();
-   void F25();
+   void F25();//Attention! 
    void F26();
    void F27();
    void F28();
@@ -126,7 +126,6 @@ protected:
 
    void N1();
    void N2();
-   void N3();
 
    void K();
 
@@ -144,8 +143,5 @@ protected:
    void T3();
 
    void O();
-
-
-
 };
 

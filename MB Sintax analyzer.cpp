@@ -24,13 +24,16 @@ MINI_BASIC_Syntax_analyzer::MINI_BASIC_Syntax_analyzer()
    NTX = NTM = 1;
    num_str = 0;
    flagErr = false;
-   
+
 }
 
 void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
 {
    start_LA(name_file);
-   Print_table_tokens();
+   //Print_table_tokens();
+
+   //Предпологаем наличие мение 700-286 констант
+   table_operands.resize(701);
 
    if (flag_error == true)
       return;
@@ -515,6 +518,7 @@ void MINI_BASIC_Syntax_analyzer::F8()
 }
 void MINI_BASIC_Syntax_analyzer::F9()
 {
+   table_operands.resize(table_operands.size() + 2);
    int p, s, t, u, v, y;
    p = table_tokens[in].value;// Значение входа
    s = NTX;// Значение поставляемому вызовом процедуры НОВТX
@@ -575,13 +579,13 @@ void MINI_BASIC_Syntax_analyzer::F10()
 }
 void MINI_BASIC_Syntax_analyzer::F11()
 {
-   table_operands.push_back(1);
+   table_operands[ptr_to_free] = 1;
    stk.pop();
    stk.pop();
    int p = stk.top();
    stk.pop();
    stk.pop();
-   stk.push(table_operands[ptr_to_free]);
+   stk.push(ptr_to_free);
    stk.push(p);
 
    ptr_to_free++;

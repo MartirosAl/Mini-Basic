@@ -23,9 +23,19 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 	for (int i = 0; i <= 286; i++)
 	{
 		if (table_operands[i] == 1)
-			file << "\t\t" << (char)((i % 26) + 'A' - 1) << (((i / 26) == 0) ? ' ' : (char)(i / 26 + '0' - 1)) << " dd ?"<< endl;
+			file << "\t\t" << (char)((i % 26) + 'A' - 1) << (((i / 26) == 0) ? ' ' : (char)(i / 26 + '0' - 1)) << " dd ?" << endl;
 	}
-	for ()
+
+	for (int j = ptr_to_free; j < NTtemp; j++)
+	{
+		file << "\t\ttemp" << j << " dd ?" << endl;
+	}
+
+	for (int j = 700; j < NTX; j++)
+	{
+		file << "\t\ttemp" << j << " dd ?" << endl;
+	}
+
 	file << "\t\t" << "temp dd ?" << endl;
 
 	file << "\t.code" << endl << "start:" << endl << endl;
@@ -35,95 +45,131 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 	{
 		switch (i.type)
 		{
-		case 1:
-			file << "end start";
+		case 0:
+			file << "end start" << endl;
 			break;
 
-		case 2:
+		case 1:
 			if (last_lable != -1)
 			{
 				file << "\t\t" << "call label_" << i.attribute1 << endl;
-				file << "\t" << last_lable << "endp" << endl;
+				file << "\tlabel_" << last_lable << " endp" << endl;
 			}
-			file << "\tlabel_" << i.attribute1 << ": ";
+			file << "\tlabel_" << i.attribute1 << ": " << endl;
 			last_lable = i.attribute1;
 			break;
 
+		case 2:
+			file << "\t\tmov eax, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tmov " << N_to_S(i.attribute1) << ", eax" << endl;
+			break;
+
 		case 3:
-			file << "\t\tmove " << N_to_S(i.attribute1) << ", " << N_to_S(i.attribute2) << endl;
+			file << "\t\tcall label_" << N_to_S(i.attribute1) << endl;
 			break;
 
 		case 4:
-			file << "\t\tcall label_" << N_to_S(i.attribute1 << endl;
+			file << "\t\tcall label_" << N_to_S(i.attribute1) << endl;
 			break;
 
 		case 5:
-			file << "\t\tcall label_" << N_to_S(i.attribute1 << endl;
 			break;
 
 		case 6:
-			break;
-
-		case 7:
-			file << "\t\tmove eax, " << N_to_S(i.attribute1) << endl;
-			file << "\t\tcmp eax," << N_to_S(i.attribute2) << endl;
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tcmp eax, " << N_to_S(i.attribute2) << endl;
 			switch (i.attribute3)
 			{
 			case 1:
-				file << "JE label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJE label_" << N_to_S(i.attribute4) << endl;
 				break;
 			case 2:
-				file << "JS label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJS label_" << N_to_S(i.attribute4) << endl;
 				break;
 			case 3:
-				file << "JNS label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJNS label_" << N_to_S(i.attribute4) << endl;
 				break;
 			case 4:
-				file << "JE label_" << N_to_S(i.attribute4) << endl;
-				file << "JS label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJE label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJS label_" << N_to_S(i.attribute4) << endl;
 				break;
 			case 5:
-				file << "JE label_" << N_to_S(i.attribute4) << endl;
-				file << "JNS label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJE label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJNS label_" << N_to_S(i.attribute4) << endl;
 				break;
 			case 6:
-				file << "JNE label_" << N_to_S(i.attribute4) << endl;
+				file << "\t\tJNE label_" << N_to_S(i.attribute4) << endl;
 				break;
 			}
 			break;
 
+		case 7:
+			file << "\t\tmov eax, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tmov " << N_to_S(i.attribute1) << ", eax" << endl;
+			break;
+
 		case 8:
-			file << "\t\tmove" << N_to_S(i.attribute1) << ", " << N_to_S(i.attribute2) << endl;
+			//Как номстрок отличается от метки?
+
 			break;
 
 		case 9:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tcmp eax, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tJE label_" << N_to_S(i.attribute4) << endl;
+			file << "\t\tJNS label_" << N_to_S(i.attribute4) << endl;
+			// Что делать со step?
 			break;
 
 		case 10:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tadd eax, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tmov " << N_to_S(i.attribute1) << ", eax" << endl;
 			break;
 
 		case 11:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tadd eax, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
 		case 12:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tsub " << N_to_S(i.attribute2) << endl;
+			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
 		case 13:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tmov ebx, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tmul ebx" << endl;
+			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
 		case 14:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tmov ebx, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tdiv ebx" << endl;
+			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
 		case 15:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			for (int j = 1; j < i.attribute2; j++)
+				file << "\t\tmul eax" << endl;
+			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
 		case 16:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tinc eax" << endl;
+			file << "\t\tmov " << N_to_S(i.attribute2) << ", eax" << endl;
 			break;
 
 		case 17:
-			break;
-
-		case 18:
+			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
+			file << "\t\tdec eax" << endl;
+			file << "\t\tmov " << N_to_S(i.attribute2) << ", eax" << endl;
 			break;
 		}
 
@@ -134,8 +180,29 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 
 string Translator_to_assembler::N_to_S(int i) const
 {
-	if ((i / 26) != 0)
-		return to_string((i % 26) + 'A' - 1) + to_string(i / 26 + '0' - 1);
+	string res;
+	if (i <= 26)
+	{
+		res.push_back((char)(i + 'A' - 1));
+	}
+	else if (i <= 286)
+	{
+		res.push_back((char)(i % 26 + 'A' - 1));
+		if ((i / 26) != 0)
+			res.push_back((char)(i / 26 + '0' - 1));
+	}
+	else if (i >= ptr_to_free && i <= NTtemp)
+	{
+		res = "temp" + to_string(i);
+	}
+	else if (i >= 700 && i < NTX)
+	{
+		res = "temp" + to_string(i);
+	}
 	else
-		return to_string((i % 26) + 'A' - 1);
+	{
+		res = to_string(table_operands[i]);
+	}
+
+	return res;
 }

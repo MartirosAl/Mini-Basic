@@ -36,8 +36,6 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 		file << "\t\ttemp" << j << " dd ?" << endl;
 	}
 
-	file << "\t\t" << "temp dd ?" << endl;
-
 	file << "\t.code" << endl << "\tstart:" << endl;
 	file << "\t call label_" << table_atoms[0].attribute1 << endl;
 	file << "\t exit" << endl;
@@ -189,15 +187,22 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 string Translator_to_assembler::N_to_S(int i) const
 {
 	string res;
-	if (i <= 26)
+	if (i <= 'Z' - 'A' + 1)
 	{
 		res.push_back((char)(i + 'A' - 1));
 	}
 	else if (i <= 286)
 	{
-		res.push_back((char)(i % 26 + 'A' - 1));
-		if ((i / 26) != 0)
+		if (i % 26 == 0)
+		{
+			res.push_back('Z');
+			res.push_back((char)(i / 27 + '0' - 1));
+		}
+		else
+		{
+			res.push_back((char)(i % 26 + 'A' - 1));
 			res.push_back((char)(i / 26 + '0' - 1));
+		}
 	}
 	else if (i >= ptr_to_free && i <= NTtemp)
 	{

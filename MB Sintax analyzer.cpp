@@ -30,7 +30,7 @@ MINI_BASIC_Syntax_analyzer::MINI_BASIC_Syntax_analyzer()
 void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
 {
    start_LA(name_file);
-   //Print_table_tokens();
+   //SPrint_table_tokens();
 
    //Предпологаем наличие мение 700-286 констант
    table_operands.resize(701);
@@ -854,7 +854,7 @@ void MINI_BASIC_Syntax_analyzer::F28()
       stk.pop();
       i--;
    }
-   while (stk.top() != 0) //что-то странное
+   while (stk.top() != 0)
    {
       tmp.push(stk.top());
       stk.pop();

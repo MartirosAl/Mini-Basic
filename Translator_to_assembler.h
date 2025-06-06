@@ -9,8 +9,10 @@ public:
 
 	void Generate_assembler_code(string file_name);
 
+	string N_to_S(int i) const;
+
 protected:
 
-	string N_to_S(int i) const;
+	
 };
 

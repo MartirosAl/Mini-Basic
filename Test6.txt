@@ -1,1 +1,4 @@
-100 LET A = 0
+10 LET N = 14
+20 LET P = 7
+
+30 END

@@ -1608,13 +1608,13 @@ void MINI_BASIC_Lexical_analyzer::Error_Handler(string error)
 {
    flag_error = 1;
    cout << error << " ";
-   cout << "JOPA" << endl;
+   cout << "An error in the lexical analyzer." << endl;
    q = &MINI_BASIC_Lexical_analyzer::Error;
 }
 
 void MINI_BASIC_Lexical_analyzer::Error()
 {
-   cout << "JOPA" << endl;
+   cout << "An error in the lexical analyzer. \n Input error." << endl;
    q = &MINI_BASIC_Lexical_analyzer::Error;
 }
 

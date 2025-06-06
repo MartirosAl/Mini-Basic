@@ -336,6 +336,25 @@ public:
       }
    }
 
+   void Write(ofstream& file)
+   {
+       for (int i = 0; i < size_main_area; i++)
+       {
+           if (table[i].value == -1 && table[i].alt == 0)
+               continue;
+           file << "--------------------------" << endl;
+           file << i << "\t | " << table[i].value << "\t | " << table[i].alt << "\t | " << endl;
+       }
+       file << "==========================" << endl;
+       for (int i = size_main_area; i < size_table; i++)
+       {
+           if (table[i].value == -1 && table[i].alt == 0)
+               continue;
+           file << i << "\t | " << table[i].value << "\t | " << table[i].alt << "\t | " << endl;
+           file << "--------------------------" << endl;
+       }
+   }
+
    void Print(int a)
    {
       if (a > size_table)

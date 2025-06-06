@@ -317,9 +317,15 @@ public:
 
    void Print_table_tokens();
 
+   void Write_table_tokens();
+
    void Print_table_operands();
 
+   void Write_table_operands();
+
    void Print_table_labels();
+
+   void Write_table_labels();
 
 };
 

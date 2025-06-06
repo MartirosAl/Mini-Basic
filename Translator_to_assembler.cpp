@@ -58,6 +58,7 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 			if (last_lable != -1)
 			{
 				file << "\t\t" << "call label_" << i.attribute1 << endl;
+				file << "\t\t ret" << endl;
 				file << "\tlabel_" << last_lable << " endp" << endl;
 			}
 			file << "\tlabel_" << i.attribute1 << " proc " << endl;
@@ -78,6 +79,7 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 			break;
 
 		case 5:
+			file << "\t\tret" << endl;
 			break;
 
 		case 6:
@@ -147,14 +149,14 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 		case 13:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
 			file << "\t\tmov ebx, " << N_to_S(i.attribute2) << endl;
-			file << "\t\tmul ebx" << endl;
+			file << "\t\timul ebx" << endl;
 			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
 		case 14:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
 			file << "\t\tmov ebx, " << N_to_S(i.attribute2) << endl;
-			file << "\t\tdiv ebx" << endl;
+			file << "\t\tidiv ebx" << endl;
 			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 

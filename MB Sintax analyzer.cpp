@@ -33,7 +33,7 @@ void MINI_BASIC_Syntax_analyzer::start_SA(string name_file)
    //SPrint_table_tokens();
 
    //Предпологаем наличие мение 700-286 констант
-   table_operands.resize(701);
+   table_operands.resize(700);
 
    if (flag_error == true)
       return;
@@ -523,6 +523,7 @@ void MINI_BASIC_Syntax_analyzer::F9()
    p = table_tokens[in].value;// Значение входа
    s = NTX;// Значение поставляемому вызовом процедуры НОВТX
    NTX++;
+   
    t = NTX;// Значение поставляемому другим вызовом процедуры НОВТХ
    NTX++;
    u = NTM;// значение поставляемому вызовом процедуры НОВТАМ
@@ -712,6 +713,7 @@ void MINI_BASIC_Syntax_analyzer::F20()
    stk.push(2);
    stk.push(7);
 }
+
 void MINI_BASIC_Syntax_analyzer::F21()
 {
    stk.pop();

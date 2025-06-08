@@ -17,30 +17,56 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 	file.clear();
 	
 
-	file << "include \\masm32\\include\\masm32rt.inc\n\n.386" << endl;
+	file << "include\\masm32\\include\\masm32rt.inc\n\n.386" << endl;
 
 	file << "\t.data?" << endl << endl;
 	for (int i = 0; i <= 286; i++)
 	{
-		if (table_operands[i] == 1)
-			file << "\t\t" << (char)((i % 26) + 'A' - 1) << (((i / 26) == 0) ? ' ' : (char)(i / 26 + '0' - 1)) << " dd ?" << endl;
+		int j = i;
+		if (j <= 26 && table_operands[j] == 1)
+			file << "\t" << (char)((j % 27) + 'A' - 1) << " dd ?" << endl;
+		else if (j <= 286 && table_operands[j] == 1)
+		{
+			file << "\t";
+			if (j % 26 == 0)
+			{
+				file << "Z";
+				j /= 26;
+				file << j % 26 - 2;
+			}
+			else
+			{
+				file << (char)((j % 26) + 'A' - 1);
+
+				j /= 26;
+				file << j % 26 - 1;
+			}
+			file << " dd ?" << endl;
+		}
 	}
 
-	for (int j = ptr_to_free; j < NTtemp; j++)
+	file << endl << "\t.data" << endl << endl;
+
+	for (int i = ptr_to_free; i < NTtemp; i++)
 	{
-		file << "\t\ttemp" << j << " dd ?" << endl;
+		file << "\ttemp" << i << " dd " << table_operands[i] << endl;
 	}
 
-	for (int j = 700; j < NTX; j++)
+	for (int i = 700; i < NTX; i++)
 	{
-		file << "\t\ttemp" << j << " dd ?" << endl;
+		file << "\ttemp" << i << " dd " << table_operands[i] << endl;
 	}
 
-	file << "\t.code" << endl << "\tstart:" << endl;
-	file << "\t call label_" << table_atoms[0].attribute1 << endl;
+	file << endl << "\t.code" << endl << "\tstart:" << endl;
+	file << "\t call label_" << table_number_string[table_atoms[0].attribute1] << endl;
+	if (table_operands[44] == 1)
+		file << "\t print str$(R0),10,13" << endl;
+	if (table_operands[70] == 1)
+		file << "\t print str$(R1),10,13" << endl;
 	file << "\t exit" << endl;
 
 	int last_lable = -1;
+	int flag_label = 0;
 	for (auto& i : table_atoms)
 	{
 
@@ -49,7 +75,7 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 		case 0:
 			if (last_lable != -1)
 			{
-				file << "\tlabel_" << last_lable << " endp" << endl;
+				file << "\tlabel_" << table_number_string[last_lable] << " endp" << endl;
 			}
 			file << "end start" << endl;
 			break;
@@ -57,12 +83,29 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 		case 1:
 			if (last_lable != -1)
 			{
-				file << "\t\t" << "call label_" << i.attribute1 << endl;
-				file << "\t\t ret" << endl;
-				file << "\tlabel_" << last_lable << " endp" << endl;
+				if (table_number_string[i.attribute1] == -1)
+				{
+					file << "\t\t" << "call label_" << i.attribute1 << endl;
+				}				
+				else
+				{
+					file << "\t\t" << "call label_" << table_number_string[i.attribute1] << endl;
+				}
+
+				file << "\t\tret" << endl;
+
+				if (flag_label)
+				{
+					file << "\tlabel_" << last_lable << " endp" << endl;
+				}
+				else
+				{
+					file << "\tlabel_" << table_number_string[last_lable] << " endp" << endl;
+				}
 			}
-			file << "\tlabel_" << i.attribute1 << " proc " << endl;
+			file << "\tlabel_" << table_number_string[i.attribute1] << " proc " << endl;
 			last_lable = i.attribute1;
+			flag_label = 0;
 			break;
 
 		case 2:
@@ -71,11 +114,17 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 			break;
 
 		case 3:
-			file << "\t\tcall label_" << i.attribute1 << endl;
+			if (table_number_string[i.attribute1] == -1)
+				file << "\t\tcall label_" << i.attribute1 << endl;
+			else
+				file << "\t\tcall label_" << table_number_string[i.attribute1] << endl;
 			break;
 
 		case 4:
-			file << "\t\tcall label_" << i.attribute1 << endl;
+			if (table_number_string[i.attribute1] == -1)
+				file << "\t\tcall label_" << i.attribute1 << endl;
+			else
+				file << "\t\tcall label_" << table_number_string[i.attribute1] << endl;
 			break;
 
 		case 5:
@@ -85,27 +134,57 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 		case 6:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
 			file << "\t\tcmp eax, " << N_to_S(i.attribute2) << endl;
-			switch (i.attribute3)
+			if (table_number_string[i.attribute4] == -1)
 			{
-			case 1:
-				file << "\t\tJE label_" << i.attribute4 << endl;
-				break;
-			case 2:
-				file << "\t\tJS label_" << i.attribute4 << endl;
-				break;
-			case 3:
-				file << "\t\tJNS label_" << N_to_S(i.attribute4) << endl;
-				break;
-			case 4:
-				file << "\t\tJE label_" << i.attribute4 << endl;
-				file << "\t\tJS label_" << i.attribute4 << endl;
-				break;
-			case 5:
-				file << "\t\tJE label_" << i.attribute4 << endl;
-				file << "\t\tJNS label_" << i.attribute4 << endl;
-				break;
-			case 6:
-				file << "\t\tJNE label_" << i.attribute4 << endl;
+				switch (i.attribute3)
+				{
+				case 1:
+					file << "\t\tJE label_" << i.attribute4 << endl;
+					break;
+				case 2:
+					file << "\t\tJS label_" << i.attribute4 << endl;
+					break;
+				case 3:
+					file << "\t\tJNS label_" << i.attribute4 << endl;
+					break;
+				case 4:
+					file << "\t\tJE label_" << i.attribute4 << endl;
+					file << "\t\tJS label_" << i.attribute4 << endl;
+					break;
+				case 5:
+					file << "\t\tJE label_" << i.attribute4 << endl;
+					file << "\t\tJNS label_" << i.attribute4 << endl;
+					break;
+				case 6:
+					file << "\t\tJNE label_" << i.attribute4 << endl;
+					break;
+				}
+			}
+			else
+			{
+				switch (i.attribute3)
+				{
+				case 1:
+					file << "\t\tJE label_" << table_number_string[i.attribute4] << endl;
+					break;
+				case 2:
+					file << "\t\tJS label_" << table_number_string[i.attribute4] << endl;
+					break;
+				case 3:
+					file << "\t\tJNS label_" << table_number_string[i.attribute4] << endl;
+					break;
+				case 4:
+					file << "\t\tJE label_" << table_number_string[i.attribute4] << endl;
+					file << "\t\tJS label_" << table_number_string[i.attribute4] << endl;
+					break;
+				case 5:
+					file << "\t\tJE label_" << table_number_string[i.attribute4] << endl;
+					file << "\t\tJNS label_" << table_number_string[i.attribute4] << endl;
+					break;
+				case 6:
+					file << "\t\tJNE label_" << table_number_string[i.attribute4] << endl;
+					break;
+				}
 				break;
 			}
 			break;
@@ -116,33 +195,64 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 			break;
 
 		case 8:
-			//Как номстрок отличается от метки?
+			if (last_lable != -1)
+			{
+				if (table_number_string[i.attribute1] == -1)
+				{
+					file << "\t\t" << "call label_" << i.attribute1 << endl;
+				}
+				else
+				{
+					file << "\t\t" << "call label_" << table_number_string[i.attribute1] << endl;
+				}
 
+				file << "\t\tret" << endl;
+
+				if (flag_label)
+				{
+					file << "\tlabel_" << last_lable << " endp" << endl;
+				}
+				else
+				{
+					file << "\tlabel_" << table_number_string[last_lable] << " endp" << endl;
+				}
+			}
+			file << "\tlabel_" << i.attribute1 << " proc " << endl;
+			last_lable = i.attribute1;
+			flag_label = 1;
 			break;
+
 
 		case 9:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
 			file << "\t\tcmp eax, " << N_to_S(i.attribute2) << endl;
-			file << "\t\tJE label_" << i.attribute4 << endl;
-			file << "\t\tJNS label_" << i.attribute4 << endl;
-			// Что делать со step?
+			if (table_number_string[i.attribute4] == -1)
+			{
+				file << "\t\tJE label_" << i.attribute4 << endl;
+				file << "\t\tJNS label_" << i.attribute4 << endl;
+			}
+			else
+			{
+				file << "\t\tJE label_" << table_number_string[i.attribute4] << endl;
+				file << "\t\tJNS label_" << table_number_string[i.attribute4] << endl;
+			}
 			break;
 
 		case 10:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
-			file << "\t\tadd eax, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tiadd eax, " << N_to_S(i.attribute2) << endl;
 			file << "\t\tmov " << N_to_S(i.attribute1) << ", eax" << endl;
 			break;
 
 		case 11:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
-			file << "\t\tadd eax, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tiadd eax, " << N_to_S(i.attribute2) << endl;
 			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
 		case 12:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
-			file << "\t\tsub eax, " << N_to_S(i.attribute2) << endl;
+			file << "\t\tisub eax, " << N_to_S(i.attribute2) << endl;
 			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 
@@ -163,7 +273,7 @@ void Translator_to_assembler::Generate_assembler_code(string file_name)
 		case 15:
 			file << "\t\tmov eax, " << N_to_S(i.attribute1) << endl;
 			for (int j = 1; j < i.attribute2; j++)
-				file << "\t\tmul eax" << endl;
+				file << "\t\timul eax" << endl;
 			file << "\t\tmov " << N_to_S(i.attribute3) << ", eax" << endl;
 			break;
 

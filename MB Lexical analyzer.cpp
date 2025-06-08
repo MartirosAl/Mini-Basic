@@ -104,23 +104,9 @@ void MINI_BASIC_Lexical_analyzer::next()
    character = Transliterator(stream.get());
 }
 
-
 MINI_BASIC_Lexical_analyzer::MINI_BASIC_Lexical_analyzer()
 {
-
-	//Tests flags
-	flag_work_state = false;
-
-	//Initial state
-	q = &MINI_BASIC_Lexical_analyzer::A1;
-	next();
-
-	//Initial table operands
-	table_operands.assign(287, 0);
-
-	func prev_func = q;
-
-
+	;
 }
 
 void MINI_BASIC_Lexical_analyzer::start_LA(string name_file)
@@ -370,12 +356,28 @@ void MINI_BASIC_Lexical_analyzer::Print_table_operands()
    cout << "--------------------------" << endl;
    for (int i = 0; i < table_operands.size(); i++)
    {
-	  if (i <= 26 && table_operands[i] != 0)
-		 cout << i << "\t | " << (char)((i % 27) + 'A' - 1) << (((i / 27) == 0) ? ' ' : (char)(i / 27 + '0' - 1)) << "\t\t | " << endl;
-	  else if (i <= 286 && table_operands[i] != 0)
-		 cout << i << "\t | " << (char)((i % 26) + 'A' - 1) << (((i / 26) == 0)? ' ' : (char)(i/26 + '0' - 1)) << "\t\t | " << endl;
-	  else if (i > 286)
-		 cout << i << "\t | " << table_operands[i] << "\t\t | " << endl;
+	   int j = i;
+	   if (j <= 26 && table_operands[j] == 1)
+		   cout << j << "\t | " << (char)((j % 27) + 'A' - 1) << "\t\t | " << endl;
+	   else if (j <= 286 && table_operands[j] == 1)
+	   {
+		   cout << j << "\t | ";
+		   if (j % 26 == 0)
+		   {
+			   cout << "Z";
+			   j /= 26;
+			   cout << j % 26 - 2 << "\t\t | " << endl;
+		   }
+		   else
+		   {
+			   cout << (char)((j % 26) + 'A' - 1);
+
+			   j /= 26;
+			   cout << j % 26 - 1 << "\t\t | " << endl;
+		   }
+	   }
+	   else if (j > 286)
+		   cout << j << "\t | " << j << "\t\t | " << endl;
    }
    cout << "--------------------------" << endl;
 }
@@ -392,12 +394,28 @@ void MINI_BASIC_Lexical_analyzer::Write_table_operands()
 	file << "--------------------------" << endl;
 	for (int i = 0; i < table_operands.size(); i++)
 	{
-		if (i <= 26 && table_operands[i] != 0)
-			file << i << "\t | " << (char)((i % 27) + 'A' - 1) << (((i / 27) == 0) ? ' ' : (char)(i / 27 + '0' - 1)) << "\t\t | " << endl;
-		else if (i <= 286 && table_operands[i] != 0)
-			file << i << "\t | " << (char)((i % 26) + 'A' - 1) << (((i / 26) == 0) ? ' ' : (char)(i / 26 + '0' - 1)) << "\t\t | " << endl;
-		else if (i > 286)
-			file << i << "\t | " << table_operands[i] << "\t\t | " << endl;
+		int j = i;
+		if (j <= 26 && table_operands[j] == 1)
+			file << j << "\t | " << (char)((j % 27) + 'A' - 1) << "\t\t | " << endl;
+		else if (j <= 286 && table_operands[j] == 1)
+		{
+			file << j << "\t | ";
+			if (j % 26 == 0)
+			{
+				file << "Z";
+				j /= 26;
+				file << j % 26 - 2 << "\t\t | " << endl;
+			}
+			else
+			{
+				file << (char)((j % 26) + 'A' - 1);
+
+				j /= 26;
+				file << j % 26 - 1 << "\t\t | " << endl;
+			}
+		}
+		else if (j > 286)
+			file << j << "\t | " << table_operands[j] << "\t\t | " << endl;
 	}
 	file << "--------------------------" << endl;
 	file.close();

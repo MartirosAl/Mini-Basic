@@ -115,7 +115,7 @@ include\masm32\include\masm32rt.inc
 	label_91 proc 
 		mov eax, T1
 		mov ebx, 10
-		idiv ebx
+		div ebx
 		mov temp307, eax
 		mov eax, temp307
 		mov T3, eax
@@ -125,7 +125,7 @@ include\masm32\include\masm32rt.inc
 	label_92 proc 
 		mov eax, T3
 		mov ebx, 10
-		imul ebx
+		mul ebx
 		mov temp308, eax
 		mov eax, temp308
 		mov T3, eax
@@ -135,7 +135,7 @@ include\masm32\include\masm32rt.inc
 	label_93 proc 
 		mov eax, T1
 		mov ebx, 10
-		idiv ebx
+		div ebx
 		mov temp309, eax
 		mov eax, temp309
 		mov T1, eax
@@ -144,7 +144,7 @@ include\masm32\include\masm32rt.inc
 	label_93 endp
 	label_100 proc 
 		mov eax, T2
-		iadd eax, T3
+		add eax, T3
 		mov temp310, eax
 		mov eax, temp310
 		mov T2, eax
@@ -202,7 +202,7 @@ include\masm32\include\masm32rt.inc
 	label_191 proc 
 		mov eax, T1
 		mov ebx, 10
-		idiv ebx
+		div ebx
 		mov temp311, eax
 		mov eax, temp311
 		mov T3, eax
@@ -212,7 +212,7 @@ include\masm32\include\masm32rt.inc
 	label_192 proc 
 		mov eax, T3
 		mov ebx, 10
-		imul ebx
+		mul ebx
 		mov temp312, eax
 		mov eax, temp312
 		mov T3, eax
@@ -222,7 +222,7 @@ include\masm32\include\masm32rt.inc
 	label_193 proc 
 		mov eax, T1
 		mov ebx, 10
-		idiv ebx
+		div ebx
 		mov temp313, eax
 		mov eax, temp313
 		mov T1, eax
@@ -231,10 +231,10 @@ include\masm32\include\masm32rt.inc
 	label_193 endp
 	label_1100 proc 
 		mov eax, T2
-		iadd eax, T1
+		add eax, T1
 		mov temp314, eax
 		mov eax, temp314
-		isub eax, T3
+		sub eax, T3
 		mov temp315, eax
 		mov eax, temp315
 		mov T2, eax
